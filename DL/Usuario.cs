@@ -23,5 +23,5 @@ public partial class Usuario
 
     public virtual ICollection<Tarea> Tareas { get; set; } = new List<Tarea>();
 
-    public virtual ICollection<TokensActualizacion> TokensActualizacions { get; set; } = new List<TokensActualizacion>();
+    public virtual ICollection<TokenActualizacion> TokenActualizacions { get; set; } = new List<TokenActualizacion>();
 }

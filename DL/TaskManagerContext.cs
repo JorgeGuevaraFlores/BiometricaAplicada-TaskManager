@@ -21,7 +21,7 @@ public partial class TaskManagerContext : DbContext
 
     public virtual DbSet<Tarea> Tareas { get; set; }
 
-    public virtual DbSet<TokensActualizacion> TokensActualizacions { get; set; }
+    public virtual DbSet<TokenActualizacion> TokenActualizacions { get; set; }
 
     public virtual DbSet<Usuario> Usuarios { get; set; }
 
@@ -78,18 +78,18 @@ public partial class TaskManagerContext : DbContext
                 .HasConstraintName("FK_Tareas_Usuarios");
         });
 
-        modelBuilder.Entity<TokensActualizacion>(entity =>
+        modelBuilder.Entity<TokenActualizacion>(entity =>
         {
-            entity.HasKey(e => e.IdTokenActualizacion);
+            entity.HasKey(e => e.IdTokenActualizacion).HasName("PK_TokensActualizacion");
 
-            entity.ToTable("TokensActualizacion");
+            entity.ToTable("TokenActualizacion");
 
             entity.HasIndex(e => e.Token, "UQ_TokensActualizacion_Token").IsUnique();
 
             entity.Property(e => e.IdTokenActualizacion).HasDefaultValueSql("(newsequentialid())");
             entity.Property(e => e.Token).HasMaxLength(500);
 
-            entity.HasOne(d => d.IdUsuarioNavigation).WithMany(p => p.TokensActualizacions)
+            entity.HasOne(d => d.IdUsuarioNavigation).WithMany(p => p.TokenActualizacions)
                 .HasForeignKey(d => d.IdUsuario)
                 .OnDelete(DeleteBehavior.ClientSetNull)
                 .HasConstraintName("FK_TokensActualizacion_Usuarios");
