@@ -1,4 +1,7 @@
 <Solution>
+  <Project Path="BL/BL.csproj" />
+  <Project Path="DL/DL.csproj" />
+  <Project Path="ML/ML.csproj" />
   <Project Path="taskmanager.client/taskmanager.client.esproj">
     <Build />
     <Deploy />
