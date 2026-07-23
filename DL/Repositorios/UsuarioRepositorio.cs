@@ -27,10 +27,21 @@ namespace DL.Repositorios
                     .AsNoTracking()
                     .FirstOrDefaultAsync(u => u.CorreoElectronico == correo);
 
+
                 if (usuario != null)
                 {
+                    ML.Usuario usuarioEncontrado = new ML.Usuario();
+                    usuarioEncontrado.IdUsuario = usuario.IdUsuario;
+                    usuarioEncontrado.Nombre = usuario.Nombre;
+                    usuarioEncontrado.ApellidoPaterno = usuario.ApellidoPaterno;
+                    usuarioEncontrado.ApellidoMaterno = usuario.ApellidoMaterno;
+                    usuarioEncontrado.CorreoElectronico = usuario.CorreoElectronico;
+                    usuarioEncontrado.PasswordHash = usuario.PasswordHash;
+                    usuarioEncontrado.FechaCreacion = usuario.FechaCreacion;
+                    usuarioEncontrado.Activo = usuario.Activo;
+
                     result.Correct = true;
-                    result.Object = usuario;
+                    result.Object = usuarioEncontrado;
                 }
                 else
                 {

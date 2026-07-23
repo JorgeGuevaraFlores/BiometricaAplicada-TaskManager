@@ -25,7 +25,7 @@ namespace TaskManager.Server.Controllers
                 return Ok(result);
             }
 
-            return BadRequest(result);
+            return Unauthorized(result);
         }
     }
 }
