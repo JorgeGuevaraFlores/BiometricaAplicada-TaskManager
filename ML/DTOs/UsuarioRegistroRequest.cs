@@ -4,24 +4,18 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace ML
+namespace ML.DTOs
 {
-    public class Usuario
+    public class UsuarioRegistroRequest
     {
-        public Guid IdUsuario { get; set; }
-
         public string Nombre { get; set; } = null!;
 
         public string ApellidoPaterno { get; set; } = null!;
 
         public string? ApellidoMaterno { get; set; }
 
-        public string? CorreoElectronico { get; set; } = null!;
+        public string CorreoElectronico { get; set; } = null!;
 
-        public string? PasswordHash { get; set; } = null!;
-
-        public DateTime FechaCreacion { get; set; }
-
-        public bool Activo { get; set; }
+        public string Password { get; set; } = null!;
     }
 }

@@ -1,4 +1,7 @@
+using BL.Interfaces;
+using BL.Servicios;
 using DL;
+using DL.Repositorios;
 using Microsoft.EntityFrameworkCore;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -17,6 +20,11 @@ var connectionString =
 
 builder.Services.AddDbContext<TaskManagerContext>(options =>
     options.UseSqlServer(connectionString));
+
+//registros
+builder.Services.AddScoped<IUsuarioRepositorio, UsuarioRepositorio>();
+builder.Services.AddScoped<IAuthService, AuthService>();
+builder.Services.AddScoped<IUsuarioService, UsuarioService>();
 
 var app = builder.Build();
 

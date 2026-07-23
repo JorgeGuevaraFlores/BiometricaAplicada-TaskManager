@@ -18,6 +18,7 @@
 
   <ItemGroup>
     <ProjectReference Include="..\BL\BL.csproj" />
+    <ProjectReference Include="..\DL\DL.csproj" />
     <ProjectReference Include="..\ML\ML.csproj" />
     <ProjectReference Include="..\taskmanager.client\taskmanager.client.esproj">
       <ReferenceOutputAssembly>false</ReferenceOutputAssembly>
