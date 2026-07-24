@@ -8,7 +8,7 @@ namespace ML
 {
     public class LoginRequest
     {
-        public string Email { get; set; } = null!;
+        public string CorreoElectronico { get; set; } = null!;
 
         public string Password { get; set; } = null!;
     }

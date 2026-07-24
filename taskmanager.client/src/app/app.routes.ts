@@ -1,3 +1,30 @@
 import { Routes } from '@angular/router';
 
-export const routes: Routes = [];
+import { MainLayoutComponent } from './shared/layouts/main-layout/main-layout.component';
+import { HomeComponent } from './features/home/components/home/home.component';
+import { LoginComponent } from './features/auth/components/login/login.component';
+
+export const routes: Routes = [
+
+    {
+        path: 'login',
+        component: LoginComponent
+    },
+
+    {
+        path: '',
+        component: MainLayoutComponent,
+        children: [
+            {
+                path: '',
+                component: HomeComponent
+            }
+        ]
+    },
+
+    {
+        path: '**',
+        redirectTo: ''
+    }
+
+];

@@ -27,7 +27,7 @@ namespace BL.Servicios
 
             try
             {
-                ML.Result resultadoUsuario = await _usuarioRepositorio.ObtenerPorCorreoAsync(login.Email.Trim().ToLower());
+                ML.Result resultadoUsuario = await _usuarioRepositorio.ObtenerPorCorreoAsync(login.CorreoElectronico.Trim().ToLower());
 
                 if (!resultadoUsuario.Correct || resultadoUsuario.Object == null)
                 {
