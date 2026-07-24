@@ -22,6 +22,8 @@ import { CommonModule } from '@angular/common';
 export class LoginComponent {
 
   mensajeError: string = '';
+  mostrarPassword: boolean = false;
+
   loginForm: FormGroup;
 
   constructor(private formBuilder: FormBuilder, private authService: AuthService) {
@@ -31,7 +33,8 @@ export class LoginComponent {
         Validators.email
       ]],
       password: ['', [
-        Validators.required
+        Validators.required,
+        Validators.minLength(8)
       ]]
     });
   }
@@ -58,11 +61,16 @@ export class LoginComponent {
         this.mensajeError = error.error.errorMessage;
 
         //depuracion
-        // console.error('Error completo:', error);
-        // console.error('Respuesta de la API:', error.error);
-        // console.error('Estado HTTP:', error.status);
+        console.error('Error completo:', error);
+        console.error('Respuesta de la API:', error.error);
+        console.error('Estado HTTP:', error.status);
       }
     });
 
   }
+
+  togglePassword(): void {
+    this.mostrarPassword = !this.mostrarPassword;
+  }
+
 }

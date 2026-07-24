@@ -20,12 +20,29 @@ namespace TaskManager.Server.Controllers
         {
             var result = await _authService.LoginAsync(login);
 
-            if (result.Correct)
+            if (!result.Correct || result.Object is null)
             {
-                return Ok(result);
+                return Unauthorized(result);
             }
 
-            return Unauthorized(result);
+            var token = (ML.DTOs.LoginResponse)result.Object;
+
+            Response.Cookies.Append(
+                "access_token",
+                token.Token,
+                new CookieOptions
+                {
+                    HttpOnly = true,
+                    Secure = true,
+                    SameSite = SameSiteMode.None,
+                    Expires = DateTimeOffset.UtcNow.AddHours(1)
+                });
+
+            return Ok(new
+            {
+                correct = true,
+                message = "Inicio de sesión correcto"
+            });
         }
     }
 }

@@ -5,12 +5,6 @@ import { HomeComponent } from './features/home/components/home/home.component';
 import { LoginComponent } from './features/auth/components/login/login.component';
 
 export const routes: Routes = [
-
-    {
-        path: 'login',
-        component: LoginComponent
-    },
-
     {
         path: '',
         component: MainLayoutComponent,
@@ -18,6 +12,10 @@ export const routes: Routes = [
             {
                 path: '',
                 component: HomeComponent
+            },
+            {
+                path: 'login',
+                component: LoginComponent
             }
         ]
     },
@@ -26,5 +24,4 @@ export const routes: Routes = [
         path: '**',
         redirectTo: ''
     }
-
 ];

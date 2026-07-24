@@ -1,68 +1,116 @@
-<div
-  class="container min-vh-100 d-flex justify-content-center align-items-center"
->
-  <div
-    class="card shadow-lg border-0 rounded-4"
-    style="max-width: 420px; width: 100%"
-  >
-    <div class="card-body p-5">
-      <h2 class="text-center fw-bold mb-4">Iniciar sesión</h2>
+<div class="container py-5">
+  <div class="row justify-content-center">
+    <div class="col-12 col-md-8 col-lg-5">
+      <div class="card shadow-lg border-0 rounded-4">
+        <div class="card-body p-4 p-md-5">
+          <h2 class="text-center fw-bold mb-4">Iniciar sesión</h2>
 
-      <form [formGroup]="loginForm" (ngSubmit)="iniciarSesion()">
-        <div class="mb-3">
-          <label for="correoElectronico" class="form-label">
-            Correo electrónico
-          </label>
+          <form [formGroup]="loginForm" (ngSubmit)="iniciarSesion()">
+            <!-- Correo electrónico -->
+            <div class="mb-3">
+              <label for="correoElectronico" class="form-label">
+                Correo electrónico
+              </label>
 
-          <div class="input-group">
-            <span class="input-group-text">
-              <i class="bi bi-envelope"></i>
-            </span>
+              <div class="input-group">
+                <span class="input-group-text">
+                  <i class="bi bi-envelope"></i>
+                </span>
 
-            <input
-              id="correoElectronico"
-              type="email"
-              class="form-control"
-              placeholder="correo@ejemplo.com"
-              formControlName="correoElectronico"
-            />
-          </div>
+                <input
+                  id="correoElectronico"
+                  type="email"
+                  class="form-control"
+                  placeholder="correo@ejemplo.com"
+                  formControlName="correoElectronico"
+                />
+              </div>
+
+              @if (
+                loginForm.get("correoElectronico")?.touched &&
+                loginForm.get("correoElectronico")?.invalid
+              ) {
+                <div class="text-danger mt-1">
+                  @if (
+                    loginForm.get("correoElectronico")?.errors?.["required"]
+                  ) {
+                    <small> El correo electrónico es obligatorio. </small>
+                  }
+
+                  @if (loginForm.get("correoElectronico")?.errors?.["email"]) {
+                    <small> Ingrese un correo electrónico válido. </small>
+                  }
+                </div>
+              }
+            </div>
+
+            <!-- Contraseña -->
+            <div class="mb-4">
+              <label for="password" class="form-label"> Contraseña </label>
+
+              <div class="input-group">
+                <span class="input-group-text">
+                  <i class="bi bi-lock"></i>
+                </span>
+
+                <input
+                  id="password"
+                  [type]="mostrarPassword ? 'text' : 'password'"
+                  class="form-control"
+                  placeholder="********"
+                  formControlName="password"
+                />
+
+                <button
+                  type="button"
+                  class="btn btn-outline-secondary"
+                  aria-label="Mostrar u ocultar contraseña"
+                  (click)="togglePassword()"
+                >
+                  @if (mostrarPassword) {
+                    <i class="bi bi-eye-slash-fill"></i>
+                  } @else {
+                    <i class="bi bi-eye-fill"></i>
+                  }
+                </button>
+              </div>
+
+              @if (
+                loginForm.get("password")?.touched &&
+                loginForm.get("password")?.invalid
+              ) {
+                <div class="text-danger mt-1">
+                  @if (loginForm.get("password")?.errors?.["required"]) {
+                    <small> La contraseña es obligatoria. </small>
+                  }
+
+                  @if (loginForm.get("password")?.errors?.["minlength"]) {
+                    <small>
+                      La contraseña debe tener al menos 8 caracteres.
+                    </small>
+                  }
+                </div>
+              }
+            </div>
+
+            @if (mensajeError) {
+              <div class="alert alert-danger" role="alert">
+                {{ mensajeError }}
+              </div>
+            }
+
+            <div class="d-grid">
+              <button
+                type="submit"
+                class="btn btn-primary btn-lg"
+                [disabled]="loginForm.invalid"
+              >
+                Iniciar sesión
+              </button>
+            </div>
+          </form>
         </div>
-
-        <div class="mb-4">
-          <label for="password" class="form-label"> Contraseña </label>
-
-          <div class="input-group">
-            <span class="input-group-text">
-              <i class="bi bi-lock"></i>
-            </span>
-
-            <input
-              id="password"
-              type="password"
-              class="form-control"
-              placeholder="********"
-              formControlName="password"
-            />
-          </div>
-        </div>
-
-        @if (mensajeError) {
-          <div class="alert alert-danger">
-            {{ mensajeError }}
-          </div>
-        }
-
-        <div class="d-grid">
-          <button
-            type="submit"
-            class="btn btn-primary btn-lg"
-            [disabled]="loginForm.invalid"
-          >
-            Iniciar sesión
-          </button>
-        </div>
-      </form>
+      </div>
     </div>
   </div>
 </div>
