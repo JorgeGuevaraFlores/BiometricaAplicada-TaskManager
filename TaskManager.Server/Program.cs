@@ -38,9 +38,13 @@ builder.Services.AddDbContext<TaskManagerContext>(options =>
 
 //registros
 builder.Services.AddScoped<IAuthService, AuthService>();
-builder.Services.AddScoped<IUsuarioService, UsuarioService>();
-builder.Services.AddScoped<IUsuarioService, UsuarioService>();
 builder.Services.AddScoped<IJwtService, JwtService>();
+
+builder.Services.AddScoped<IUsuarioService, UsuarioService>();
+builder.Services.AddScoped<IUsuarioService, UsuarioService>();
+
+builder.Services.AddScoped<IUsuarioRepositorio, UsuarioRepositorio>();
+builder.Services.AddScoped<IUsuarioService, UsuarioService>();
 
 builder.Services.AddScoped<IUsuarioRepositorio, UsuarioRepositorio>();
 

@@ -59,5 +59,31 @@ namespace BL.Servicios
 
             return result;
         }
+
+        public async Task<ML.Result> GetAllAsync()
+        {
+            ML.Result result = new ML.Result();
+
+            try
+            {
+                result = await _usuarioRepositorio.GetAllAsync();
+
+                if (!result.Correct)
+                {
+                    result.ErrorMessage = string.IsNullOrWhiteSpace(result.ErrorMessage)
+                        ? "No fue posible obtener los usuarios."
+                        : result.ErrorMessage;
+                }
+            }
+            catch (Exception ex)
+            {
+                result.Correct = false;
+                result.ErrorMessage =
+                    $"Ocurrió un error al obtener los usuarios: {ex.Message}";
+                result.Ex = ex;
+            }
+
+            return result;
+        }
     }
 }

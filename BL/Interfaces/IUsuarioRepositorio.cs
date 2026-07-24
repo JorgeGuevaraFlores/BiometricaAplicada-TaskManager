@@ -11,6 +11,7 @@ namespace BL.Interfaces
 
         Task<ML.Result?> ObtenerPorCorreoAsync(string correo);
         Task<ML.Result> AgregarAsync(ML.Usuario usuario);
+        Task<ML.Result> GetAllAsync();
 
     }
 }

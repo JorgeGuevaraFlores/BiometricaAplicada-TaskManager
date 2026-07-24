@@ -9,7 +9,6 @@ namespace TaskManager.Server.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
-    [Authorize]
     public class UsuarioController : ControllerBase
     {
         private readonly IUsuarioService _usuarioService;
@@ -27,6 +26,20 @@ namespace TaskManager.Server.Controllers
             if (result.Correct)
             {
                 return Created(string.Empty, result);
+            }
+
+            return BadRequest(result);
+        }
+
+        [HttpGet]
+        [Route("GetAll")]
+        public async Task<IActionResult> GetAll()
+        {
+            Result result = await _usuarioService.GetAllAsync();
+
+            if (result.Correct)
+            {
+                return Ok(result);
             }
 
             return BadRequest(result);

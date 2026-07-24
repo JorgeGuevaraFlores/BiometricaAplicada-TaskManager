@@ -92,5 +92,30 @@ namespace DL.Repositorios
 
             return result;
         }
+
+        public async Task<ML.Result> GetAllAsync()
+        {
+            ML.Result result = new ML.Result();
+
+            try
+            {
+                var usuarios = await _context.Database.SqlQueryRaw<ML.DTOs.UsuarioResponse>("EXEC UsuarioGetAll").ToListAsync();
+
+                result.Objects = usuarios.Cast<object>().ToList();
+
+                result.Correct = true;
+            }
+            catch (Exception ex)
+            {
+                result.Correct = false;
+                result.ErrorMessage =
+                    $"Ocurrió un error al obtener los usuarios. {ex.Message}";
+
+                result.Ex = ex;
+            }
+
+            return result;
+        }
+
     }
 }

@@ -11,5 +11,7 @@ namespace BL.Interfaces
     public interface IUsuarioService
     {
         Task<Result> RegistroAsync(UsuarioRegistroRequest request);
+        Task<ML.Result> GetAllAsync();
+
     }
 }
