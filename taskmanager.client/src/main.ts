@@ -1,11 +1,14 @@
-import { platformBrowser, BrowserModule, bootstrapApplication } from '@angular/platform-browser';
+import { bootstrapApplication } from '@angular/platform-browser';
+import { provideRouter } from '@angular/router';
+import { provideHttpClient } from '@angular/common/http';
 
-import { HttpClientModule } from '@angular/common/http';
-import { AppRoutingModule } from './app/app-routing.module';
 import { AppComponent } from './app/app.component';
-import { importProvidersFrom } from '@angular/core';
+import { routes } from './app/app.routes';
 
 bootstrapApplication(AppComponent, {
-    providers: [importProvidersFrom(BrowserModule, HttpClientModule, AppRoutingModule)]
+  providers: [
+    provideRouter(routes),
+    provideHttpClient()
+  ]
 })
-  .catch(err => console.error(err));
+  .catch(error => console.error(error));
