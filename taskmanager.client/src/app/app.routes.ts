@@ -4,6 +4,8 @@ import { MainLayoutComponent } from './shared/layouts/main-layout/main-layout.co
 import { HomeComponent } from './features/home/components/home/home.component';
 import { LoginComponent } from './features/auth/components/login/login.component';
 
+import { UsuarioListComponent } from './features/usuarios/pages/usuario-list/usuario-list.component';
+
 export const routes: Routes = [
     {
         path: '',
@@ -16,6 +18,10 @@ export const routes: Routes = [
             {
                 path: 'login',
                 component: LoginComponent
+            },
+            {
+                path: 'usuarios',
+                component: UsuarioListComponent
             }
         ]
     },
