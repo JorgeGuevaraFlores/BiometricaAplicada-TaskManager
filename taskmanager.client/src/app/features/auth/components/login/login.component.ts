@@ -24,18 +24,33 @@ export class LoginComponent {
   mensajeError: string = '';
   mostrarPassword: boolean = false;
 
-  loginForm: FormGroup;
+  loginForm!: FormGroup;
 
-  constructor(private formBuilder: FormBuilder, private authService: AuthService) {
+  constructor(
+    private formBuilder: FormBuilder,
+    private authService: AuthService
+  ) { }
+
+  ngOnInit(): void {
+    this.crearFormulario();
+  }
+
+  private crearFormulario(): void {
     this.loginForm = this.formBuilder.group({
-      correoElectronico: ['', [
-        Validators.required,
-        Validators.email
-      ]],
-      password: ['', [
-        Validators.required,
-        Validators.minLength(8)
-      ]]
+      correoElectronico: [
+        '',
+        [
+          Validators.required,
+          Validators.email
+        ]
+      ],
+      password: [
+        '',
+        [
+          Validators.required,
+          Validators.minLength(8)
+        ]
+      ]
     });
   }
 
