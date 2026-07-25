@@ -59,5 +59,20 @@ namespace TaskManager.Server.Controllers
 
             return NotFound(result);
         }
+
+        [HttpPut]
+        [Route("Update")]
+        public async Task<IActionResult> Actualizar([FromBody] UsuarioRegistroRequest usuario)
+        {
+            Result result = await _usuarioService.UpdateAsync(usuario);
+
+            if (result.Correct)
+            {
+                return Ok(result);
+            }
+
+            return BadRequest(result);
+        }
+
     }
 }

@@ -65,10 +65,25 @@ export class UsuarioEditComponent implements OnInit {
       });
   }
 
-  actualizarUsuario(usuario: UsuarioRequest): void {
-    console.log('Usuario por actualizar:', {
-      idUsuario: this.idUsuario,
-      ...usuario
+  actualizarUsuario(usuarioRequest: UsuarioRequest): void {
+    if (!this.usuario) {
+      return;
+    }
+
+    const usuarioActualizar: UsuarioRequest = {
+      ...usuarioRequest,
+      idUsuario: this.usuario.idUsuario
+    };
+
+    this.usuarioService.update(usuarioActualizar).subscribe({
+      next: (result) => {
+        if (result.correct) {
+          this.router.navigate(['/usuarios']);
+        }
+      },
+      error: (error) => {
+        console.error('Error al actualizar el usuario:', error);
+      }
     });
   }
 }

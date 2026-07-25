@@ -111,14 +111,11 @@ export class UsuarioFormComponent implements OnInit, OnChanges {
 
       password: [
         '',
-        this.modo === 'crear'
-          ? [
-            Validators.required,
-            Validators.pattern(this.passwordRegex)
-          ]
-          : [
-            Validators.pattern(this.passwordRegex)
-          ]
+        [
+          Validators.required,
+          Validators.pattern(this.passwordRegex)
+        ]
+
       ]
     });
   }

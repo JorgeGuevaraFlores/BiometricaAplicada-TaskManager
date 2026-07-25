@@ -8,7 +8,7 @@ namespace ML
 {
     public class Usuario
     {
-        public Guid IdUsuario { get; set; }
+        public Guid? IdUsuario { get; set; }
 
         public string Nombre { get; set; } = null!;
 

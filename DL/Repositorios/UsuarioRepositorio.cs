@@ -151,5 +151,39 @@ namespace DL.Repositorios
 
             return result;
         }
+
+        public async Task<Result> UpdateAsync(ML.Usuario usuario)
+        {
+            Result result = new Result();
+
+            try
+            {
+                int filasAfectadas = await _context.Database.ExecuteSqlRawAsync(
+                    @"EXEC UsuarioUpdate
+                @IdUsuario = {0},
+                @Nombre = {1},
+                @ApellidoPaterno = {2},
+                @ApellidoMaterno = {3},
+                @CorreoElectronico = {4},
+                @PasswordHash = {5}",
+                    usuario.IdUsuario,
+                    usuario.Nombre,
+                    usuario.ApellidoPaterno,
+                    usuario.ApellidoMaterno,
+                    usuario.CorreoElectronico,
+                    usuario.PasswordHash
+                );
+
+                result.Correct = filasAfectadas >= 0;
+            }
+            catch (Exception ex)
+            {
+                result.Correct = false;
+                result.ErrorMessage = ex.Message;
+            }
+
+            return result;
+        }
+
     }
 }

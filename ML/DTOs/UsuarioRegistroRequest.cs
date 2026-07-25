@@ -8,6 +8,7 @@ namespace ML.DTOs
 {
     public class UsuarioRegistroRequest
     {
+        public Guid? IdUsuario { get; set; }
         public string Nombre { get; set; } = null!;
 
         public string ApellidoPaterno { get; set; } = null!;

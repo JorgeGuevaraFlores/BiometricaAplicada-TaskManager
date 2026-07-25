@@ -47,4 +47,15 @@ export class UsuarioService {
       }
     );
   }
+
+  update(usuario: UsuarioRequest): Observable<Result<Usuario>> {
+    return this.http.put<Result<Usuario>>(
+      `${this.apiUrl}/Update`,
+      usuario,
+      {
+        withCredentials: true
+      }
+    );
+  }
+
 }

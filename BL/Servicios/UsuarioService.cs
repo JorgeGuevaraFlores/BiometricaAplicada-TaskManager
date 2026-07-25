@@ -111,5 +111,40 @@ namespace BL.Servicios
 
             return result;
         }
+
+        public async Task<Result> UpdateAsync(UsuarioRegistroRequest usuarioRequest)
+        {
+            Result result = new Result();
+
+            try
+            {
+
+                string passwordHash = BCrypt.Net.BCrypt.HashPassword(usuarioRequest.Password);
+
+                Usuario usuario = new Usuario();
+
+                usuario.IdUsuario = usuarioRequest.IdUsuario ?? null;
+
+                usuario.Nombre = usuarioRequest.Nombre.Trim();
+                usuario.ApellidoPaterno = usuarioRequest.ApellidoPaterno.Trim();
+
+                usuario.ApellidoMaterno = string.IsNullOrWhiteSpace(usuarioRequest.ApellidoMaterno)
+                    ? null
+                    : usuarioRequest.ApellidoMaterno.Trim();
+
+                usuario.CorreoElectronico = usuarioRequest.CorreoElectronico.Trim().ToLower();
+                usuario.PasswordHash = passwordHash;
+
+                result = await _usuarioRepositorio.UpdateAsync(usuario);
+            }
+            catch (Exception ex)
+            {
+                result.Correct = false;
+                result.ErrorMessage = ex.Message;
+            }
+
+            return result;
+        }
+
     }
 }
