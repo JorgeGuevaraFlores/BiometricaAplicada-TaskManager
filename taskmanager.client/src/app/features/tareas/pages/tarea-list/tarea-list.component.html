@@ -198,7 +198,11 @@
                   Editar
                 </a>
 
-                <button type="button" class="btn btn-outline-danger btn-sm">
+                <button
+                  type="button"
+                  class="btn btn-outline-danger btn-sm"
+                  (click)="eliminarTarea(tarea.idTarea)"
+                >
                   <i class="bi bi-trash-fill me-1"></i>
                   Eliminar
                 </button>

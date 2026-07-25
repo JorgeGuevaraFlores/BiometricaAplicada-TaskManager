@@ -141,4 +141,28 @@ export class TareaListComponent implements OnInit {
     this.obtenerTareas();
   }
 
+  eliminarTarea(idTarea: string): void {
+    const confirmar = confirm(
+      '¿Estás seguro de que deseas eliminar esta tarea?'
+    );
+
+    if (!confirmar) {
+      return;
+    }
+
+    this.tareaService.delete(idTarea).subscribe({
+      next: (result) => {
+        if (result.correct) {
+          this.obtenerTareas();
+        }
+      },
+      error: (error) => {
+        console.error(
+          'Error al eliminar la tarea:',
+          error
+        );
+      }
+    });
+  }
+
 }

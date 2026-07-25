@@ -56,4 +56,10 @@ export class TareaService {
             }
         );
     }
+
+    delete(idTarea: string): Observable<Result<null>> {
+        return this.http.delete<Result<null>>(
+            `${this.apiUrl}/Delete/${idTarea}`
+        );
+    }
 }
