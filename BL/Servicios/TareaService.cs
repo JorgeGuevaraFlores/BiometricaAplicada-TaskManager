@@ -35,13 +35,13 @@ namespace BL.Servicios
             return result;
         }
 
-        public async Task<Result> GetAllAsync()
+        public async Task<Result> GetAllAsync(int? idPrioridadTarea, int? idEstadoTarea)
         {
             Result result = new Result();
 
             try
             {
-                result = await _tareaRepositorio.GetAllAsync();
+                result = await _tareaRepositorio.GetAllAsync(idPrioridadTarea, idEstadoTarea);
             }
             catch (Exception ex)
             {

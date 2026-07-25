@@ -15,9 +15,32 @@ export class TareaService {
 
     constructor(private http: HttpClient) { }
 
-    getAll(): Observable<Result<Tarea>> {
+    getAll(
+        idPrioridadTarea?: number,
+        idEstadoTarea?: number
+    ): Observable<Result<Tarea>> {
+        const parametros: string[] = [];
+
+        if (idPrioridadTarea) {
+            parametros.push(
+                `idPrioridadTarea=${idPrioridadTarea}`
+            );
+        }
+
+        if (idEstadoTarea) {
+            parametros.push(
+                `idEstadoTarea=${idEstadoTarea}`
+            );
+        }
+
+        let url = `${this.apiUrl}/GetAll`;
+
+        if (parametros.length > 0) {
+            url += `?${parametros.join('&')}`;
+        }
+
         return this.http.get<Result<Tarea>>(
-            `${this.apiUrl}/GetAll`,
+            url,
             {
                 withCredentials: true
             }

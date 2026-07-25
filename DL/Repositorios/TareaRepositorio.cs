@@ -51,17 +51,21 @@ namespace DL.Repositorios
             return result;
         }
 
-        public async Task<Result> GetAllAsync()
+        public async Task<Result> GetAllAsync(int? idPrioridadTarea, int? idEstadoTarea)
         {
             Result result = new Result();
 
             try
             {
-                List<TareaResponse> tareas = await _context.Database
-                    .SqlQueryRaw<TareaResponse>(
-                        "EXEC TareaGetAll"
-                    )
-                    .ToListAsync();
+                List<TareaResponse> tareas =
+                    await _context.Database
+                        .SqlQueryRaw<TareaResponse>(
+                            "EXEC TareaGetAll @IdPrioridadTarea = {0}," +
+                            "@IdEstadoTarea = {1}",
+                            idPrioridadTarea ?? (object)DBNull.Value,
+                            idEstadoTarea ?? (object)DBNull.Value
+                        )
+                        .ToListAsync();
 
                 result.Correct = true;
                 result.Objects = tareas.Cast<object>().ToList();

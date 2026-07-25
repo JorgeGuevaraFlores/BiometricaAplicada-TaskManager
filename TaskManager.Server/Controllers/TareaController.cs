@@ -43,9 +43,9 @@ namespace TaskManager.Server.Controllers
 
         [HttpGet]
         [Route("GetAll")]
-        public async Task<IActionResult> GetAll()
+        public async Task<IActionResult> GetAll([FromQuery] int?idPrioridadTarea, [FromQuery] int? idEstadoTarea)
         {
-            Result result = await _tareaService.GetAllAsync();
+            Result result = await _tareaService.GetAllAsync(idPrioridadTarea, idEstadoTarea);
 
             if (result.Correct)
             {

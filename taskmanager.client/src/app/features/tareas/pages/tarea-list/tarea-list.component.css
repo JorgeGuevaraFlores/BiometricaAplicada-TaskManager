@@ -21,3 +21,24 @@
   font-size: 3rem;
   color: #6c757d;
 }
+
+/* colores de prioridades */
+.prioridad-baja {
+  background-color: #198754;
+  color: white;
+}
+
+.prioridad-media {
+  background-color: #ffc107;
+  color: #212529;
+}
+
+.prioridad-alta {
+  background-color: #fd7e14;
+  color: white;
+}
+
+.prioridad-critica {
+  background-color: #dc3545;
+  color: white;
+}

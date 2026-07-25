@@ -17,8 +17,34 @@
     </a>
   </div>
 
-  <div class="row mb-4">
-    <div class="col-12 col-md-5 col-lg-4">
+  <div class="row g-3 mb-4">
+    <div class="col-12 col-md-6">
+      <label for="filtroEstado" class="form-label">
+        <i class="bi bi-funnel-fill me-1"></i>
+        Filtrar por estado
+      </label>
+
+      <div class="input-group">
+        <span class="input-group-text">
+          <i class="bi bi-check2-circle"></i>
+        </span>
+
+        <select
+          id="filtroEstado"
+          class="form-select"
+          (change)="cambiarFiltroEstado($event)"
+        >
+          <option value="0">Todos los estados</option>
+
+          @for (estado of estados; track estado.idEstadoTarea) {
+            <option [value]="estado.idEstadoTarea">
+              {{ estado.nombre }}
+            </option>
+          }
+        </select>
+      </div>
+    </div>
+    <div class="col-12 col-md-6">
       <label for="filtroPrioridad" class="form-label">
         <i class="bi bi-funnel-fill me-1"></i>
         Filtrar por prioridad
@@ -63,7 +89,12 @@
     </div>
   }
 
-  @if (!cargando && !errorMessage && tareas.length === 0) {
+  @if (
+    !cargando &&
+    !errorMessage &&
+    tareas.length === 0 &&
+    (idPrioridadSeleccionada !== 0 || idEstadoSeleccionado !== 0)
+  ) {
     <div class="card border-0 shadow-sm">
       <div class="card-body text-center py-5">
         <i class="bi bi-clipboard2-x empty-icon"></i>
@@ -83,8 +114,8 @@
   @if (
     !cargando &&
     !errorMessage &&
-    tareas.length > 0 &&
-    tareasFiltradas.length === 0
+    idPrioridadSeleccionada !== 0 &&
+    tareas.length === 0
   ) {
     <div class="alert alert-info text-center">
       <i class="bi bi-info-circle-fill me-2"></i>
@@ -92,9 +123,9 @@
     </div>
   }
 
-  @if (!cargando && !errorMessage && tareasFiltradas.length > 0) {
+  @if (!cargando && !errorMessage && tareas.length > 0) {
     <div class="row g-4">
-      @for (tarea of tareasFiltradas; track tarea.idTarea) {
+      @for (tarea of tareas; track tarea.idTarea) {
         <div class="col-12 col-md-6 col-xl-4">
           <div class="card task-card h-100 shadow-sm">
             <div
@@ -104,7 +135,13 @@
                 Estado {{ tarea.estadoTareaNombre }}
               </span>
 
-              <span class="badge text-bg-warning">
+              <span
+                class="badge"
+                [class.prioridad-baja]="tarea.idPrioridadTarea === 1"
+                [class.prioridad-media]="tarea.idPrioridadTarea === 2"
+                [class.prioridad-alta]="tarea.idPrioridadTarea === 3"
+                [class.prioridad-critica]="tarea.idPrioridadTarea === 4"
+              >
                 Prioridad {{ tarea.prioridadTareaNombre }}
               </span>
             </div>

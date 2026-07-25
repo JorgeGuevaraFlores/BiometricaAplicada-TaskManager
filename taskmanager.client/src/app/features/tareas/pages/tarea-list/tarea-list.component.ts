@@ -8,6 +8,9 @@ import { PrioridadTarea } from '../../../../core/models/prioridadTarea.model';
 import { TareaService } from '../../../../core/services/tarea.service';
 import { PrioridadTareaService } from '../../../../core/services/prioridadTarea.service';
 
+import { EstadoTarea } from '../../../../core/models/estadoTarea.model';
+import { EstadoTareaService } from '../../../../core/services/estadoTarea.service';
+
 @Component({
   selector: 'app-tarea-list',
   standalone: true,
@@ -21,52 +24,68 @@ import { PrioridadTareaService } from '../../../../core/services/prioridadTarea.
 export class TareaListComponent implements OnInit {
 
   tareas: Tarea[] = [];
-  tareasFiltradas: Tarea[] = [];
 
   prioridades: PrioridadTarea[] = [];
-
   idPrioridadSeleccionada = 0;
+
+  estados: EstadoTarea[] = [];
+  idEstadoSeleccionado = 0;
 
   cargando = false;
   errorMessage: string | null = null;
 
   constructor(
     private tareaService: TareaService,
-    private prioridadTareaService: PrioridadTareaService
+    private prioridadTareaService: PrioridadTareaService,
+    private estadoTareaService: EstadoTareaService
   ) { }
 
   ngOnInit(): void {
     this.obtenerTareas();
     this.obtenerPrioridades();
+    this.obtenerEstados();
   }
 
   obtenerTareas(): void {
     this.cargando = true;
     this.errorMessage = null;
 
-    this.tareaService.getAll().subscribe({
-      next: (result) => {
-        if (result.correct) {
-          this.tareas = result.objects ?? [];
-          this.tareasFiltradas = [...this.tareas];
+    const prioridad =
+      this.idPrioridadSeleccionada === 0
+        ? undefined
+        : this.idPrioridadSeleccionada;
 
-        } else {
+    const estado =
+      this.idEstadoSeleccionado === 0
+        ? undefined
+        : this.idEstadoSeleccionado;
+
+    this.tareaService
+      .getAll(prioridad, estado)
+      .subscribe({
+        next: (result) => {
+          if (result.correct) {
+            this.tareas = result.objects ?? [];
+          } else {
+            this.errorMessage =
+              result.errorMessage ??
+              'No fue posible obtener las tareas.';
+          }
+
+          this.cargando = false;
+        },
+        error: (error) => {
+          console.error(
+            'Error al obtener las tareas:',
+            error
+          );
+
           this.errorMessage =
-            result.errorMessage ??
-            'No fue posible obtener las tareas.';
+            'Ocurrió un error al consultar las tareas.';
+
+          this.cargando = false;
         }
-
-        this.cargando = false;
-      },
-      error: (error) => {
-        console.error('Error al obtener las tareas:', error);
-
-        this.errorMessage =
-          'Ocurrió un error al consultar las tareas.';
-
-        this.cargando = false;
-      }
-    });
+      });
   }
 
   obtenerPrioridades(): void {
@@ -85,21 +104,41 @@ export class TareaListComponent implements OnInit {
     });
   }
 
+  obtenerEstados(): void {
+    this.estadoTareaService.getAll().subscribe({
+      next: (result) => {
+        if (result.correct) {
+          this.estados = result.objects ?? [];
+        }
+      },
+      error: (error) => {
+        console.error(
+          'Error al obtener los estados:',
+          error
+        );
+      }
+    });
+  }
+
+
   cambiarFiltroPrioridad(event: Event): void {
     const select = event.target as HTMLSelectElement;
 
-    this.idPrioridadSeleccionada = Number(select.value);
-
-    if (this.idPrioridadSeleccionada === 0) {
-      this.tareasFiltradas = [...this.tareas];
-      return;
-    }
-
-    this.tareasFiltradas = this.tareas.filter(
-      tarea =>
-        Number(tarea.idPrioridadTarea) ===
-        this.idPrioridadSeleccionada
+    this.idPrioridadSeleccionada = Number(
+      select.value
     );
 
+    this.obtenerTareas();
   }
+
+  cambiarFiltroEstado(event: Event): void {
+    const select = event.target as HTMLSelectElement;
+
+    this.idEstadoSeleccionado = Number(
+      select.value
+    );
+
+    this.obtenerTareas();
+  }
+
 }

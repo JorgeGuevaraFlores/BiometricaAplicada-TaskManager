@@ -12,7 +12,7 @@ namespace BL.Interfaces
     {
         Task<Result> AddAsync(TareaRequest request, Guid idUsuario);
 
-        Task<Result> GetAllAsync();
+        Task<Result> GetAllAsync(int? idPrioridadTarea, int? idEstadoTarea);
 
         Task<Result> GetByIdAsync(Guid idTarea);
 
