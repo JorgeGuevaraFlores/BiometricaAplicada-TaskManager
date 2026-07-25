@@ -10,6 +10,7 @@ import { UsuarioEditComponent } from './features/usuarios/pages/usuario-edit/usu
 import { TareaListComponent } from './features/tareas/pages/tarea-list/tarea-list.component';
 import { TareaAddComponent } from './features/tareas/pages/tarea-add/tarea-add.component';
 import { TareaEditComponent } from './features/tareas/pages/tarea-edit/tarea-edit.component';
+import { authGuard } from './core/guards/auth.guard';
 
 export const routes: Routes = [
     {
@@ -26,27 +27,33 @@ export const routes: Routes = [
             },
             {
                 path: 'usuarios',
-                component: UsuarioListComponent
+                component: UsuarioListComponent,
+                canActivate: [authGuard]
             },
             {
                 path: 'usuarios/agregar',
-                component: UsuarioAddComponent
+                component: UsuarioAddComponent,
+                canActivate: [authGuard]
             },
             {
                 path: 'usuarios/editar/:id',
-                component: UsuarioEditComponent
+                component: UsuarioEditComponent,
+                canActivate: [authGuard]
             },
             {
                 path: 'tareas',
-                component: TareaListComponent
+                component: TareaListComponent,
+                canActivate: [authGuard]
             },
             {
                 path: 'tareas/agregar',
-                component: TareaAddComponent
+                component: TareaAddComponent,
+                canActivate: [authGuard]
             },
             {
                 path: 'tareas/editar/:id',
-                component: TareaEditComponent
+                component: TareaEditComponent,
+                canActivate: [authGuard]
             }
         ]
     },

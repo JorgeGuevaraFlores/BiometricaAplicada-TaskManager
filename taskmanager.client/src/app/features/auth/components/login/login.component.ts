@@ -10,6 +10,7 @@ import { AuthService } from '../../../../core/services/auth.service';
 import { LoginRequest } from '../../../../core/models/login-request.model';
 
 import { CommonModule } from '@angular/common';
+import { Router } from '@angular/router';
 
 
 @Component({
@@ -28,7 +29,8 @@ export class LoginComponent {
 
   constructor(
     private formBuilder: FormBuilder,
-    private authService: AuthService
+    private authService: AuthService,
+    private router: Router
   ) { }
 
   ngOnInit(): void {
@@ -55,7 +57,6 @@ export class LoginComponent {
   }
 
   iniciarSesion(): void {
-
     if (this.loginForm.invalid) {
       this.loginForm.markAllAsTouched();
       return;
@@ -63,25 +64,28 @@ export class LoginComponent {
 
     this.mensajeError = '';
 
-
-    const loginRequest: LoginRequest = this.loginForm.value;
-
+    const loginRequest: LoginRequest = this.loginForm.getRawValue();
 
     this.authService.login(loginRequest).subscribe({
       next: (response) => {
-        console.log(response);
+        if (response.correct) {
+          this.authService.marcarSesionIniciada();
+          this.router.navigate(['']);
+          return;
+        }
+
+        this.mensajeError =
+          response.errorMessage ??
+          'No fue posible iniciar sesión.';
       },
       error: (error) => {
-        console.log(error.error.errorMessage)
-        this.mensajeError = error.error.errorMessage;
+        this.mensajeError =
+          error.error?.errorMessage ??
+          'Ocurrió un error al iniciar sesión.';
 
-        //depuracion
-        console.error('Error completo:', error);
-        console.error('Respuesta de la API:', error.error);
-        console.error('Estado HTTP:', error.status);
+        console.error('Error al iniciar sesión:', error);
       }
     });
-
   }
 
   togglePassword(): void {

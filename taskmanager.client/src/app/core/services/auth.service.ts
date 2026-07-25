@@ -1,6 +1,6 @@
 import { HttpClient } from '@angular/common/http';
-import { Injectable } from '@angular/core';
-import { Observable } from 'rxjs';
+import { Injectable, signal } from '@angular/core';
+import { Observable, tap } from 'rxjs';
 
 import { environment } from '../../../enviroments/environment';
 import { LoginRequest } from '../models/login-request.model';
@@ -13,6 +13,7 @@ import { Result } from '../models/result.model';
 export class AuthService {
 
   private readonly apiUrl = `${environment.apiUrl}/auth`;
+  estaAutenticado = signal(false);
 
   constructor(private http: HttpClient) { }
 
@@ -23,5 +24,30 @@ export class AuthService {
       withCredentials: true
     }
     );
+  }
+
+  validarSesion(): Observable<Result<null>> {
+    return this.http
+      .get<Result<null>>(
+        `${this.apiUrl}/ValidateSession`
+      )
+      .pipe(
+        tap({
+          next: (result) => {
+            this.estaAutenticado.set(result.correct);
+          },
+          error: () => {
+            this.estaAutenticado.set(false);
+          }
+        })
+      );
+  }
+
+  marcarSesionIniciada(): void {
+    this.estaAutenticado.set(true);
+  }
+
+  marcarSesionCerrada(): void {
+    this.estaAutenticado.set(false);
   }
 }

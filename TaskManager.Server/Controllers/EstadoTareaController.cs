@@ -1,4 +1,5 @@
 ﻿using BL.Interfaces;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using ML;
@@ -7,6 +8,8 @@ namespace TaskManager.Server.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
+    [Authorize]
+
     public class EstadoTareaController : ControllerBase
     {
         private readonly IEstadoTareaService _estadoTareaService;

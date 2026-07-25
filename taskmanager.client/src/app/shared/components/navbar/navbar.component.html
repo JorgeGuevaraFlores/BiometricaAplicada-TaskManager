@@ -1,6 +1,6 @@
-<nav class="navbar navbar-expand-lg navbar-dark bg-success shadow-sm">
+<nav class="navbar navbar-expand-lg bg-body-tertiary shadow-sm">
   <div class="container">
-    <a class="navbar-brand fw-bold" routerLink="/">
+    <a class="navbar-brand" routerLink="/">
       <i class="bi bi-check2-square me-2"></i>
       Task Manager
     </a>
@@ -9,32 +9,55 @@
       class="navbar-toggler"
       type="button"
       data-bs-toggle="collapse"
-      data-bs-target="#navbar"
+      data-bs-target="#navbarPrincipal"
+      aria-controls="navbarPrincipal"
+      aria-expanded="false"
+      aria-label="Mostrar navegación"
     >
       <span class="navbar-toggler-icon"></span>
     </button>
 
-    <div class="collapse navbar-collapse" id="navbar">
-      <ul class="navbar-nav ms-auto">
-        <li class="nav-item">
-          <a class="nav-link active" routerLink="/"> Inicio </a>
-        </li>
+    <div id="navbarPrincipal" class="collapse navbar-collapse">
+      <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+        @if (authService.estaAutenticado()) {
+          <li class="nav-item">
+            <a class="nav-link" routerLink="/tareas" routerLinkActive="active">
+              <i class="bi bi-list-check me-1"></i>
+              Tareas
+            </a>
+          </li>
 
-        <li class="nav-item">
-          <a class="nav-link" routerLink="/usuarios" routerLinkActive="active">
-            Usuarios
-          </a>
-        </li>
+          <li class="nav-item">
+            <a
+              class="nav-link"
+              routerLink="/usuarios"
+              routerLinkActive="active"
+            >
+              <i class="bi bi-people-fill me-1"></i>
+              Usuarios
+            </a>
+          </li>
+        }
+      </ul>
 
-        <li class="nav-item">
-          <a class="nav-link" routerLink="/tareas"> Tareas </a>
-        </li>
+      <ul class="navbar-nav">
+        @if (!authService.estaAutenticado()) {
+          <li class="nav-item">
+            <a class="nav-link" routerLink="/login" routerLinkActive="active">
+              <i class="bi bi-box-arrow-in-right me-1"></i>
+              Iniciar sesión
+            </a>
+          </li>
+        }
 
-        <li class="nav-item ms-lg-3">
-          <a class="btn btn-light btn-sm" routerLink="/login">
-            Iniciar sesión
-          </a>
-        </li>
+        @if (authService.estaAutenticado()) {
+          <li class="nav-item">
+            <span class="nav-link text-muted">
+              <i class="bi bi-person-circle me-1"></i>
+              Sesión activa
+            </span>
+          </li>
+        }
       </ul>
     </div>
   </div>

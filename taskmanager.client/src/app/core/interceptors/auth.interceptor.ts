@@ -17,7 +17,10 @@ export const authInterceptor: HttpInterceptorFn = (request, next) => {
 
   return next(requestConCredenciales).pipe(
     catchError((error: HttpErrorResponse) => {
-      if (error.status === 401) {
+      const esValidacionSesion =
+        request.url.includes('/ValidateSession');
+
+      if (error.status === 401 && !esValidacionSesion) {
         router.navigate(['/login']);
       }
 

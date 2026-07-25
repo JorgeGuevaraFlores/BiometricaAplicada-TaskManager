@@ -1,6 +1,8 @@
 ﻿using BL.Interfaces;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using ML;
 
 namespace TaskManager.Server.Controllers
 {
@@ -44,5 +46,19 @@ namespace TaskManager.Server.Controllers
                 message = "Inicio de sesión correcto"
             });
         }
+
+        [Authorize]
+        [HttpGet]
+        [Route("ValidateSession")]
+        public IActionResult ValidateSession()
+        {
+            Result result = new Result
+            {
+                Correct = true
+            };
+
+            return Ok(result);
+        }
+
     }
 }
