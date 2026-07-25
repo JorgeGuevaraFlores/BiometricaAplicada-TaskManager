@@ -3,6 +3,7 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using ML;
 using ML.DTOs;
+using System.Security.Claims;
 
 namespace TaskManager.Server.Controllers
 {
@@ -21,7 +22,16 @@ namespace TaskManager.Server.Controllers
         [Route("Add")]
         public async Task<IActionResult> Add([FromBody] TareaRequest request)
         {
-            Result result = await _tareaService.AddAsync(request);
+            string? idUsuarioClaim = User.FindFirstValue(
+                ClaimTypes.NameIdentifier
+            );
+
+            if (!Guid.TryParse(idUsuarioClaim, out Guid idUsuario))
+            {
+                return Unauthorized();
+            }
+
+            Result result = await _tareaService.AddAsync(request, idUsuario);
 
             if (result.Correct)
             {
@@ -63,7 +73,17 @@ namespace TaskManager.Server.Controllers
         [Route("Update")]
         public async Task<IActionResult> Update([FromBody] TareaRequest request)
         {
-            Result result = await _tareaService.UpdateAsync(request);
+            string? idUsuarioClaim = User.FindFirstValue(
+                ClaimTypes.NameIdentifier
+            );
+
+            if (!Guid.TryParse(idUsuarioClaim, out Guid idUsuario))
+            {
+                return Unauthorized();
+            }
+
+
+            Result result = await _tareaService.UpdateAsync(request, idUsuario);
 
             if (result.Correct)
             {

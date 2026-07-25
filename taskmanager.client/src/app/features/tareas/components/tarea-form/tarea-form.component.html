@@ -1,0 +1,152 @@
+<form [formGroup]="tareaForm" (ngSubmit)="guardar()">
+  <div class="mb-3">
+    <label for="titulo" class="form-label">
+      <i class="bi bi-card-heading me-1"></i>
+      Título
+    </label>
+
+    <div class="input-group">
+      <span class="input-group-text">
+        <i class="bi bi-pencil-square"></i>
+      </span>
+
+      <input
+        id="titulo"
+        type="text"
+        class="form-control"
+        placeholder="Escribe el título de la tarea"
+        formControlName="titulo"
+      />
+    </div>
+
+    @if (
+      tareaForm.get("titulo")?.touched &&
+      tareaForm.get("titulo")?.hasError("required")
+    ) {
+      <div class="text-danger small mt-1">El título es obligatorio.</div>
+    }
+
+    @if (
+      tareaForm.get("titulo")?.touched &&
+      tareaForm.get("titulo")?.hasError("maxlength")
+    ) {
+      <div class="text-danger small mt-1">
+        El título no puede superar los 150 caracteres.
+      </div>
+    }
+  </div>
+
+  <div class="mb-3">
+    <label for="descripcion" class="form-label">
+      <i class="bi bi-text-paragraph me-1"></i>
+      Descripción
+    </label>
+
+    <div class="input-group">
+      <span class="input-group-text align-items-start pt-2">
+        <i class="bi bi-card-text"></i>
+      </span>
+
+      <textarea
+        id="descripcion"
+        class="form-control"
+        rows="4"
+        placeholder="Escribe una descripción"
+        formControlName="descripcion"
+      ></textarea>
+    </div>
+
+    @if (
+      tareaForm.get("descripcion")?.touched &&
+      tareaForm.get("descripcion")?.hasError("maxlength")
+    ) {
+      <div class="text-danger small mt-1">
+        La descripción no puede superar los 1000 caracteres.
+      </div>
+    }
+  </div>
+
+  <div class="row">
+    <div class="col-12 col-md-6 mb-3">
+      <label for="estado" class="form-label">
+        <i class="bi bi-check2-circle me-1"></i>
+        Estado
+      </label>
+
+      <div class="input-group">
+        <span class="input-group-text">
+          <i class="bi bi-clipboard-check-fill"></i>
+        </span>
+
+        <select id="estado" class="form-select" formControlName="idEstadoTarea">
+          <option value="">Selecciona un estado</option>
+
+          @for (estado of estados; track estado.idEstadoTarea) {
+            <option [value]="estado.idEstadoTarea">
+              {{ estado.nombre }}
+            </option>
+          }
+        </select>
+      </div>
+
+      @if (
+        tareaForm.get("idEstadoTarea")?.touched &&
+        tareaForm.get("idEstadoTarea")?.hasError("required")
+      ) {
+        <div class="text-danger small mt-1">Debes seleccionar un estado.</div>
+      }
+    </div>
+
+    <div class="col-12 col-md-6 mb-3">
+      <label for="prioridad" class="form-label">
+        <i class="bi bi-exclamation-diamond-fill me-1"></i>
+        Prioridad
+      </label>
+
+      <div class="input-group">
+        <span class="input-group-text">
+          <i class="bi bi-flag-fill"></i>
+        </span>
+
+        <select
+          id="prioridad"
+          class="form-select"
+          formControlName="idPrioridadTarea"
+        >
+          <option value="">Selecciona una prioridad</option>
+
+          @for (prioridad of prioridades; track prioridad.idPrioridadTarea) {
+            <option [value]="prioridad.idPrioridadTarea">
+              {{ prioridad.nombre }}
+            </option>
+          }
+        </select>
+      </div>
+
+      @if (
+        tareaForm.get("idPrioridadTarea")?.touched &&
+        tareaForm.get("idPrioridadTarea")?.hasError("required")
+      ) {
+        <div class="text-danger small mt-1">
+          Debes seleccionar una prioridad.
+        </div>
+      }
+    </div>
+  </div>
+
+  <div class="d-flex justify-content-end gap-2">
+    <button
+      type="button"
+      class="btn btn-outline-secondary"
+      (click)="cancelar()"
+    >
+      <i class="bi bi-x-circle me-1"></i>
+      Cancelar
+    </button>
+
+    <button type="submit" class="btn btn-primary">
+      <i class="bi bi-floppy-fill me-1"></i>
+      Guardar tarea
+    </button>
+  </div>
+</form>

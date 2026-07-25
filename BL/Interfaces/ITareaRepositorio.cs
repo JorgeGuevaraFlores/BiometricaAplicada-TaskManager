@@ -10,13 +10,13 @@ namespace BL.Interfaces
 {
     public interface ITareaRepositorio
     {
-        Task<Result> AddAsync(TareaRequest request);
+        Task<Result> AddAsync(TareaRequest request, Guid idUsuario);
 
         Task<Result> GetAllAsync();
 
         Task<Result> GetByIdAsync(Guid idTarea);
 
-        Task<Result> UpdateAsync(TareaRequest request);
+        Task<Result> UpdateAsync(TareaRequest request, Guid idUsuario);
 
         Task<Result> DeleteAsync(Guid idTarea);
     }

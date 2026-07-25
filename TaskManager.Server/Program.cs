@@ -45,6 +45,12 @@ builder.Services.AddScoped<IUsuarioService, UsuarioService>();
 builder.Services.AddScoped<ITareaRepositorio, TareaRepositorio>();
 builder.Services.AddScoped<ITareaService, TareaService>();
 
+builder.Services.AddScoped<IEstadoTareaRepositorio,EstadoTareaRepositorio>();
+builder.Services.AddScoped<IEstadoTareaService,EstadoTareaService>();
+
+builder.Services.AddScoped<IPrioridadTareaRepositorio,PrioridadTareaRepositorio>();
+builder.Services.AddScoped<IPrioridadTareaService,PrioridadTareaService>();
+
 builder.Services.AddScoped<IUsuarioRepositorio, UsuarioRepositorio>();
 
 //jwt

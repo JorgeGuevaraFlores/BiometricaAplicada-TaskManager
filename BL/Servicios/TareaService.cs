@@ -18,13 +18,13 @@ namespace BL.Servicios
             _tareaRepositorio = tareaRepositorio;
         }
 
-        public async Task<Result> AddAsync(TareaRequest request)
+        public async Task<Result> AddAsync(TareaRequest request, Guid idUsuario)
         {
             Result result = new Result();
 
             try
             {
-                result = await _tareaRepositorio.AddAsync(request);
+                result = await _tareaRepositorio.AddAsync(request, idUsuario);
             }
             catch (Exception ex)
             {
@@ -69,13 +69,13 @@ namespace BL.Servicios
             return result;
         }
 
-        public async Task<Result> UpdateAsync(TareaRequest request)
+        public async Task<Result> UpdateAsync(TareaRequest request, Guid idUsuario)
         {
             Result result = new Result();
 
             try
             {
-                result = await _tareaRepositorio.UpdateAsync(request);
+                result = await _tareaRepositorio.UpdateAsync(request, idUsuario);
             }
             catch (Exception ex)
             {

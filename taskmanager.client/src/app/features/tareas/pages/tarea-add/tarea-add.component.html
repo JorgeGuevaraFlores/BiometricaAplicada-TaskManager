@@ -1,0 +1,14 @@
+<div class="container py-4">
+  <div class="row justify-content-center">
+    <div class="col-12 col-lg-8">
+      <div class="card border-0 shadow-sm">
+        <div class="card-body p-4">
+          <app-tarea-form
+            (guardarTarea)="guardarTarea($event)"
+            (cancelarFormulario)="cancelar()"
+          ></app-tarea-form>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

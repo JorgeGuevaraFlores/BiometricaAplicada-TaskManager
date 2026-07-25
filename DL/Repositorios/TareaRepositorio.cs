@@ -20,7 +20,7 @@ namespace DL.Repositorios
             _context = context;
         }
 
-        public async Task<Result> AddAsync(TareaRequest request)
+        public async Task<Result> AddAsync(TareaRequest request, Guid idUsuario)
         {
             Result result = new Result();
 
@@ -37,7 +37,7 @@ namespace DL.Repositorios
                     request.Descripcion ?? (object)DBNull.Value,
                     request.IdEstadoTarea,
                     request.IdPrioridadTarea,
-                    request.IdUsuario
+                    idUsuario
                 );
 
                 result.Correct = filasAfectadas > 0;
@@ -110,7 +110,7 @@ namespace DL.Repositorios
             return result;
         }
 
-        public async Task<Result> UpdateAsync(TareaRequest request)
+        public async Task<Result> UpdateAsync(TareaRequest request, Guid idUsuario)
         {
             Result result = new Result();
 
@@ -129,7 +129,7 @@ namespace DL.Repositorios
                     request.Descripcion ?? (object)DBNull.Value,
                     request.IdEstadoTarea,
                     request.IdPrioridadTarea,
-                    request.IdUsuario
+                    idUsuario
                 );
 
                 result.Correct = true;

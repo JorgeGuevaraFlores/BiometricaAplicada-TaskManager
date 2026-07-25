@@ -18,6 +18,5 @@ namespace ML.DTOs
 
         public int IdPrioridadTarea { get; set; }
 
-        public Guid IdUsuario { get; set; }
     }
 }
