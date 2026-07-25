@@ -1,5 +1,6 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using ML;
+using ML.DTOs;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -117,5 +118,38 @@ namespace DL.Repositorios
             return result;
         }
 
+        public async Task<Result> GetByIdAsync(Guid idUsuario)
+        {
+            Result result = new Result();
+
+            try
+            {
+                List<UsuarioResponse> usuarios = await _context.Database
+                 .SqlQueryRaw<UsuarioResponse>(
+                     "EXEC UsuarioGetById @IdUsuario = {0}",
+                     idUsuario)
+                 .ToListAsync();
+
+                UsuarioResponse? usuario = usuarios.FirstOrDefault();
+
+                if (usuario != null)
+                {
+                    result.Correct = true;
+                    result.Object = usuario;
+                }
+                else
+                {
+                    result.Correct = false;
+                    result.ErrorMessage = "Usuario no encontrado.";
+                }
+            }
+            catch (Exception ex)
+            {
+                result.Correct = false;
+                result.ErrorMessage = ex.Message;
+            }
+
+            return result;
+        }
     }
 }

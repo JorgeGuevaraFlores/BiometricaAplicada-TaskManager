@@ -1,4 +1,12 @@
-import { Component, OnInit } from '@angular/core';
+import {
+  Component,
+  EventEmitter,
+  Input,
+  OnChanges,
+  OnInit,
+  Output,
+  SimpleChanges
+} from '@angular/core';
 import {
   FormBuilder,
   FormGroup,
@@ -6,7 +14,7 @@ import {
   Validators
 } from '@angular/forms';
 
-import { EventEmitter, Output } from '@angular/core';
+import { Usuario } from '../../../../core/models/usuario.model';
 import { UsuarioRequest } from '../../../../core/models/usuario-request.model';
 
 @Component({
@@ -18,9 +26,13 @@ import { UsuarioRequest } from '../../../../core/models/usuario-request.model';
   templateUrl: './usuario-form.component.html',
   styleUrl: './usuario-form.component.css'
 })
-export class UsuarioFormComponent implements OnInit {
+export class UsuarioFormComponent implements OnInit, OnChanges {
 
   usuarioForm!: FormGroup;
+
+  @Input() usuario: Usuario | null = null;
+
+  @Input() modo: 'crear' | 'editar' = 'crear';
 
   @Output() guardarUsuario = new EventEmitter<UsuarioRequest>();
 
@@ -33,6 +45,35 @@ export class UsuarioFormComponent implements OnInit {
 
   ngOnInit(): void {
     this.crearFormulario();
+
+    if (this.usuario) {
+      this.cargarUsuario();
+    }
+
+  }
+
+  ngOnChanges(changes: SimpleChanges): void {
+    if (
+      changes['usuario'] &&
+      this.usuarioForm &&
+      this.usuario
+    ) {
+      this.cargarUsuario();
+    }
+  }
+
+  private cargarUsuario(): void {
+    if (!this.usuario) {
+      return;
+    }
+
+    this.usuarioForm.patchValue({
+      nombre: this.usuario.nombre,
+      apellidoPaterno: this.usuario.apellidoPaterno,
+      apellidoMaterno: this.usuario.apellidoMaterno ?? '',
+      correoElectronico: this.usuario.correoElectronico,
+      password: ''
+    });
   }
 
   private crearFormulario(): void {
@@ -70,10 +111,14 @@ export class UsuarioFormComponent implements OnInit {
 
       password: [
         '',
-        [
-          Validators.required,
-          Validators.pattern(this.passwordRegex)
-        ]
+        this.modo === 'crear'
+          ? [
+            Validators.required,
+            Validators.pattern(this.passwordRegex)
+          ]
+          : [
+            Validators.pattern(this.passwordRegex)
+          ]
       ]
     });
   }
@@ -88,9 +133,6 @@ export class UsuarioFormComponent implements OnInit {
     this.guardarUsuario.emit(this.usuarioForm.value);
   }
 
-  /**
-   * Limpia todos los campos del formulario.
-   */
   cancelar(): void {
     this.usuarioForm.reset();
   }

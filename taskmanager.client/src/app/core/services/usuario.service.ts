@@ -38,4 +38,13 @@ export class UsuarioService {
       }
     );
   }
+
+  obtenerPorId(idUsuario: string): Observable<Result<Usuario>> {
+    return this.http.get<Result<Usuario>>(
+      `${this.apiUrl}/GetById/${idUsuario}`,
+      {
+        withCredentials: true
+      }
+    );
+  }
 }

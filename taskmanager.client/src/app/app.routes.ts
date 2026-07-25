@@ -6,6 +6,7 @@ import { LoginComponent } from './features/auth/components/login/login.component
 
 import { UsuarioListComponent } from './features/usuarios/pages/usuario-list/usuario-list.component';
 import { UsuarioAddComponent } from './features/usuarios/pages/usuario-add/usuario-add.component'
+import { UsuarioEditComponent } from './features/usuarios/pages/usuario-edit/usuario-edit.component';
 
 export const routes: Routes = [
     {
@@ -27,6 +28,10 @@ export const routes: Routes = [
             {
                 path: 'usuarios/agregar',
                 component: UsuarioAddComponent
+            },
+            {
+                path: 'usuarios/editar/:id',
+                component: UsuarioEditComponent
             }
         ]
     },

@@ -12,6 +12,7 @@ namespace BL.Interfaces
     {
         Task<Result> RegistroAsync(UsuarioRegistroRequest request);
         Task<ML.Result> GetAllAsync();
+        Task<Result> GetByIdAsync(Guid idUsuario);
 
     }
 }

@@ -45,5 +45,19 @@ namespace TaskManager.Server.Controllers
 
             return BadRequest(result);
         }
+
+        [HttpGet]
+        [Route("GetById/{id}")]
+        public async Task<IActionResult> GetById(Guid id)
+        {
+            Result result = await _usuarioService.GetByIdAsync(id);
+
+            if (result.Correct)
+            {
+                return Ok(result);
+            }
+
+            return NotFound(result);
+        }
     }
 }

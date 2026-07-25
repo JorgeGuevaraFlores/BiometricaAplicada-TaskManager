@@ -1,4 +1,5 @@
-﻿using System;
+﻿using ML;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -12,6 +13,7 @@ namespace BL.Interfaces
         Task<ML.Result?> ObtenerPorCorreoAsync(string correo);
         Task<ML.Result> AgregarAsync(ML.Usuario usuario);
         Task<ML.Result> GetAllAsync();
+        Task<Result> GetByIdAsync(Guid idUsuario);
 
     }
 }

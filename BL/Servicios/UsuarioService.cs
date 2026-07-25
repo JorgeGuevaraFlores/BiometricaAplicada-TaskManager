@@ -85,5 +85,31 @@ namespace BL.Servicios
 
             return result;
         }
+
+        public async Task<ML.Result> GetByIdAsync(Guid IdUsuario)
+        {
+            ML.Result result = new ML.Result();
+
+            try
+            {
+                result = await _usuarioRepositorio.GetByIdAsync(IdUsuario);
+
+                if (!result.Correct)
+                {
+                    result.ErrorMessage = string.IsNullOrWhiteSpace(result.ErrorMessage)
+                        ? "No se encontro el usuario"
+                        : result.ErrorMessage;
+                }
+            }
+            catch (Exception ex)
+            {
+                result.Correct = false;
+                result.ErrorMessage =
+                    $"Ocurrió un error al buscar al usuario: {ex.Message}";
+                result.Ex = ex;
+            }
+
+            return result;
+        }
     }
 }
