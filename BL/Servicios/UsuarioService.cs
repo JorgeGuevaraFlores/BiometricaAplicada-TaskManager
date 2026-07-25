@@ -164,5 +164,26 @@ namespace BL.Servicios
             return result;
         }
 
+        public async Task<Result> ActualizarEstatusAsync(
+    Guid idUsuario,
+    bool activo
+)
+        {
+            Result result = new Result();
+
+            try
+            {
+                result = await _usuarioRepositorio
+                    .ActualizarEstatusAsync(idUsuario, activo);
+            }
+            catch (Exception ex)
+            {
+                result.Correct = false;
+                result.ErrorMessage = ex.Message;
+            }
+
+            return result;
+        }
+
     }
 }

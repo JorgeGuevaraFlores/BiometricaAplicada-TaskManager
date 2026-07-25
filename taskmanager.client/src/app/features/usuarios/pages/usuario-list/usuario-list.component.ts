@@ -57,4 +57,24 @@ export class UsuarioListComponent implements OnInit {
       }
     });
   }
+
+  cambiarEstatus(usuario: Usuario): void {
+    const nuevoEstatus = !usuario.activo;
+
+    this.usuarioService
+      .updateEstatus(usuario.idUsuario, nuevoEstatus)
+      .subscribe({
+        next: (result) => {
+          if (result.correct) {
+            usuario.activo = nuevoEstatus;
+          }
+        },
+        error: (error) => {
+          console.error(
+            'Error al actualizar el estatus del usuario:',
+            error
+          );
+        }
+      });
+  }
 }

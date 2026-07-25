@@ -15,6 +15,7 @@ namespace BL.Interfaces
         Task<Result> GetByIdAsync(Guid idUsuario);
         Task<Result> UpdateAsync(UsuarioRegistroRequest usuario);
         Task<Result> DeleteAsync(Guid idUsuario);
+        Task<Result> ActualizarEstatusAsync(Guid idUsuario, bool activo);
 
     }
 }

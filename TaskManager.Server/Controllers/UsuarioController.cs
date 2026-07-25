@@ -87,5 +87,20 @@ namespace TaskManager.Server.Controllers
 
             return BadRequest(result);
         }
+
+        [HttpPatch]
+        [Route("UpdateStatus/{idUsuario}/estatus")]
+        public async Task<IActionResult> ActualizarEstatus(Guid idUsuario, [FromQuery] bool activo)
+        {
+            Result result = await _usuarioService.ActualizarEstatusAsync(idUsuario, activo);
+
+            if (result.Correct)
+            {
+                return Ok(result);
+            }
+
+            return BadRequest(result);
+        }
+
     }
 }

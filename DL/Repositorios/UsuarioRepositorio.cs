@@ -206,5 +206,34 @@ namespace DL.Repositorios
 
             return result;
         }
+
+        public async Task<Result> ActualizarEstatusAsync(
+    Guid idUsuario,
+    bool activo
+)
+        {
+            Result result = new Result();
+
+            try
+            {
+                await _context.Database.ExecuteSqlRawAsync(
+                    @"EXEC UsuarioUpdateEstatus
+                @IdUsuario = {0},
+                @Activo = {1}",
+                    idUsuario,
+                    activo
+                );
+
+                result.Correct = true;
+            }
+            catch (Exception ex)
+            {
+                result.Correct = false;
+                result.ErrorMessage = ex.Message;
+            }
+
+            return result;
+        }
+
     }
 }

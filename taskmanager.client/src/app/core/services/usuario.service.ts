@@ -67,4 +67,14 @@ export class UsuarioService {
     );
   }
 
+  updateEstatus(idUsuario: string, activo: boolean): Observable<Result<null>> {
+    return this.http.patch<Result<null>>(
+      `${this.apiUrl}/UpdateStatus/${idUsuario}/estatus?activo=${activo}`,
+      null,
+      {
+        withCredentials: true
+      }
+    );
+  }
+
 }
