@@ -8,6 +8,7 @@ namespace ML.DTOs
 {
     public class LoginResponse
     {
+        public Guid IdUsuario { get; set; }
         public string Token { get; set; } = null!;
     }
 }

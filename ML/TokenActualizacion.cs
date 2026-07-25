@@ -16,8 +16,8 @@ namespace ML
 
         public DateTime FechaExpiracion { get; set; }
 
-        public bool Revocado { get; set; }
+        public bool Estatus { get; set; }
 
-        public Usuario Usuario { get; set; } = null!;
+        //public Usuario Usuario { get; set; } = null!;
     }
 }

@@ -9,5 +9,6 @@ namespace BL.Interfaces
     public interface IAuthService
     {
         Task<ML.Result> LoginAsync(ML.LoginRequest login);
+        Task<ML.Result> RenovarTokenAsync(string refreshToken);
     }
 }

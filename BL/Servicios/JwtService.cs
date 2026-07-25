@@ -7,6 +7,7 @@ using System.Collections.Generic;
 using System.IdentityModel.Tokens.Jwt;
 using System.Linq;
 using System.Security.Claims;
+using System.Security.Cryptography;
 using System.Text;
 using System.Threading.Tasks;
 
@@ -21,7 +22,7 @@ namespace BL.Servicios
             _configuration = configuration;
         }
 
-        public string GenerarToken(Usuario usuario)
+        public string GenerarToken(ML.Usuario usuario)
         {
             string key = _configuration["Jwt:Key"]!;
             string issuer = _configuration["Jwt:Issuer"]!;
@@ -51,6 +52,13 @@ namespace BL.Servicios
             JwtSecurityTokenHandler tokenHandler = new JwtSecurityTokenHandler();
 
             return tokenHandler.WriteToken(token);
+        }
+
+        public string GenerarRefreshToken()
+        {
+            byte[] bytesAleatorios = RandomNumberGenerator.GetBytes(64);
+
+            return Convert.ToBase64String(bytesAleatorios);
         }
     }
 }

@@ -1,8 +1,10 @@
 ﻿using BL.Interfaces;
+using BL.Servicios;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using ML;
+using ML.DTOs;
 
 namespace TaskManager.Server.Controllers
 {
@@ -11,39 +13,76 @@ namespace TaskManager.Server.Controllers
     public class AuthController : ControllerBase
     {
         private readonly IAuthService _authService;
+        private readonly IJwtService _jwtService;
+        private readonly ITokenActualizacionService _tokenActualizacionService;
 
-        public AuthController(IAuthService authService)
+        public AuthController(IAuthService authService, IJwtService jwtService, ITokenActualizacionService tokenActualizacionService)
         {
             _authService = authService;
+            _jwtService = jwtService;
+            _tokenActualizacionService = tokenActualizacionService;
         }
 
-        [HttpPost("login")]
-        public async Task<IActionResult> Login(ML.LoginRequest login)
+        [HttpPost]
+        [Route("Login")]
+        public async Task<IActionResult> Login([FromBody] LoginRequest request)
         {
-            var result = await _authService.LoginAsync(login);
+            Result result = await _authService.LoginAsync(request);
 
-            if (!result.Correct || result.Object is null)
+            if (!result.Correct || result.Object is not ML.DTOs.LoginResponse loginResponse)
             {
                 return Unauthorized(result);
             }
 
-            var token = (ML.DTOs.LoginResponse)result.Object;
+            string refreshToken = _jwtService.GenerarRefreshToken();
+
+            DateTime fechaExpiracionRefreshToken = DateTime.UtcNow.AddDays(7);
+
+            ML.TokenActualizacion tokenActualizacion =
+                new ML.TokenActualizacion
+                {
+                    IdUsuario = loginResponse.IdUsuario,
+                    Token = refreshToken,
+                    FechaExpiracion = fechaExpiracionRefreshToken
+                };
+
+            Result resultadoToken = await _tokenActualizacionService.AddAsync(tokenActualizacion);
+
+            if (!resultadoToken.Correct)
+            {
+                return StatusCode(
+                    StatusCodes.Status500InternalServerError,
+                    resultadoToken
+                );
+            }
 
             Response.Cookies.Append(
                 "access_token",
-                token.Token,
+                loginResponse.Token,
                 new CookieOptions
                 {
                     HttpOnly = true,
                     Secure = true,
                     SameSite = SameSiteMode.None,
-                    Expires = DateTimeOffset.UtcNow.AddHours(1)
-                });
+                    Expires = DateTimeOffset.UtcNow.AddMinutes(15)
+                }
+            );
 
-            return Ok(new
+            Response.Cookies.Append(
+                "refresh_token",
+                refreshToken,
+                new CookieOptions
+                {
+                    HttpOnly = true,
+                    Secure = true,
+                    SameSite = SameSiteMode.None,
+                    Expires = fechaExpiracionRefreshToken
+                }
+            );
+
+            return Ok(new Result
             {
-                correct = true,
-                message = "Inicio de sesión correcto"
+                Correct = true
             });
         }
 
@@ -58,6 +97,62 @@ namespace TaskManager.Server.Controllers
             };
 
             return Ok(result);
+        }
+
+        [HttpPost]
+        [Route("RefreshToken")]
+        public async Task<IActionResult> RefreshToken()
+        {
+            string? refreshToken =
+                Request.Cookies["refresh_token"];
+
+            if (string.IsNullOrWhiteSpace(refreshToken))
+            {
+                return Unauthorized(new Result
+                {
+                    Correct = false,
+                    ErrorMessage =
+                        "No se encontró el token de actualización."
+                });
+            }
+
+            Result result =
+                await _authService.RenovarTokenAsync(refreshToken);
+
+            if (!result.Correct ||
+                result.Object is not ML.DTOs.RefreshTokenResponse response)
+            {
+                return Unauthorized(result);
+            }
+
+            Response.Cookies.Append(
+                "access_token",
+                response.AccessToken,
+                new CookieOptions
+                {
+                    HttpOnly = true,
+                    Secure = true,
+                    SameSite = SameSiteMode.None,
+                    Expires = DateTimeOffset.UtcNow.AddMinutes(15)
+                }
+            );
+
+            Response.Cookies.Append(
+                "refresh_token",
+                response.RefreshToken,
+                new CookieOptions
+                {
+                    HttpOnly = true,
+                    Secure = true,
+                    SameSite = SameSiteMode.None,
+                    Expires = response.FechaExpiracionRefreshToken
+                }
+            );
+
+            return Ok(new Result
+            {
+                Correct = true
+            });
         }
 
     }

@@ -50,4 +50,11 @@ export class AuthService {
   marcarSesionCerrada(): void {
     this.estaAutenticado.set(false);
   }
+
+  renovarToken(): Observable<Result<null>> {
+    return this.http.post<Result<null>>(
+      `${this.apiUrl}/RefreshToken`,
+      {}
+    );
+  }
 }

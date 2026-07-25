@@ -51,6 +51,9 @@ builder.Services.AddScoped<IEstadoTareaService,EstadoTareaService>();
 builder.Services.AddScoped<IPrioridadTareaRepositorio,PrioridadTareaRepositorio>();
 builder.Services.AddScoped<IPrioridadTareaService,PrioridadTareaService>();
 
+builder.Services.AddScoped<ITokenActualizacionRepositorio,TokenActualizacionRepositorio>();
+builder.Services.AddScoped<ITokenActualizacionService,TokenActualizacionService>();
+
 builder.Services.AddScoped<IUsuarioRepositorio, UsuarioRepositorio>();
 
 //jwt

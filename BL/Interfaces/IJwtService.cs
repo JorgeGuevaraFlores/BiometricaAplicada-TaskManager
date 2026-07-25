@@ -10,5 +10,6 @@ namespace BL.Interfaces
     public interface IJwtService
     {
         string GenerarToken(ML.Usuario usuario);
+        string GenerarRefreshToken();
     }
 }
