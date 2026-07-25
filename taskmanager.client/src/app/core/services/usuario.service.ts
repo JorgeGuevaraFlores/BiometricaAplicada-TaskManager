@@ -4,6 +4,8 @@ import { Observable } from 'rxjs';
 
 import { environment } from '../../../enviroments/environment';
 import { Usuario } from '../models/usuario.model';
+import { UsuarioRequest } from '../models/usuario-request.model';
+
 import { Result } from '../models/result.model';
 
 @Injectable({
@@ -21,6 +23,16 @@ export class UsuarioService {
   getAll(): Observable<Result<Usuario>> {
     return this.http.get<Result<Usuario>>(
       `${this.apiUrl}/getAll`,
+      {
+        withCredentials: true
+      }
+    );
+  }
+
+  agregar(usuario: UsuarioRequest): Observable<Result<Usuario>> {
+    return this.http.post<Result<Usuario>>(
+      `${this.apiUrl}/add`,
+      usuario,
       {
         withCredentials: true
       }

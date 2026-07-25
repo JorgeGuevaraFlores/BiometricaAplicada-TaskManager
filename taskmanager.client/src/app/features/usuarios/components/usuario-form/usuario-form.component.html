@@ -1,0 +1,230 @@
+<div class="card border-0 shadow-lg rounded-4">
+  <div class="card-body p-4">
+    <form [formGroup]="usuarioForm" (ngSubmit)="guardar()" novalidate>
+      <div class="row g-4">
+        <!-- Nombre -->
+        <div class="col-md-6">
+          <label for="nombre" class="form-label fw-semibold"> Nombre </label>
+
+          <div class="input-group">
+            <span class="input-group-text">
+              <i class="bi bi-person-fill"></i>
+            </span>
+
+            <input
+              id="nombre"
+              type="text"
+              class="form-control"
+              formControlName="nombre"
+              placeholder="Ingresa el nombre"
+              [class.is-invalid]="
+                usuarioForm.get('nombre')?.invalid &&
+                usuarioForm.get('nombre')?.touched
+              "
+            />
+          </div>
+
+          @if (
+            usuarioForm.get("nombre")?.hasError("required") &&
+            usuarioForm.get("nombre")?.touched
+          ) {
+            <div class="text-danger small mt-1">El nombre es obligatorio.</div>
+          }
+
+          @if (
+            usuarioForm.get("nombre")?.hasError("pattern") &&
+            usuarioForm.get("nombre")?.touched
+          ) {
+            <div class="text-danger small mt-1">
+              El nombre solo puede contener letras.
+            </div>
+          }
+        </div>
+
+        <!-- Apellido paterno -->
+        <div class="col-md-6">
+          <label for="apellidoPaterno" class="form-label fw-semibold">
+            Apellido paterno
+          </label>
+
+          <div class="input-group">
+            <span class="input-group-text">
+              <i class="bi bi-person-vcard-fill"></i>
+            </span>
+
+            <input
+              id="apellidoPaterno"
+              type="text"
+              class="form-control"
+              formControlName="apellidoPaterno"
+              placeholder="Ingresa el apellido paterno"
+              [class.is-invalid]="
+                usuarioForm.get('apellidoPaterno')?.invalid &&
+                usuarioForm.get('apellidoPaterno')?.touched
+              "
+            />
+          </div>
+
+          @if (
+            usuarioForm.get("apellidoPaterno")?.hasError("required") &&
+            usuarioForm.get("apellidoPaterno")?.touched
+          ) {
+            <div class="text-danger small mt-1">
+              El apellido paterno es obligatorio.
+            </div>
+          }
+
+          @if (
+            usuarioForm.get("apellidoPaterno")?.hasError("pattern") &&
+            usuarioForm.get("apellidoPaterno")?.touched
+          ) {
+            <div class="text-danger small mt-1">
+              El apellido paterno solo puede contener letras.
+            </div>
+          }
+        </div>
+
+        <!-- Apellido materno -->
+        <div class="col-md-6">
+          <label for="apellidoMaterno" class="form-label fw-semibold">
+            Apellido materno
+          </label>
+
+          <div class="input-group">
+            <span class="input-group-text">
+              <i class="bi bi-person-vcard"></i>
+            </span>
+
+            <input
+              id="apellidoMaterno"
+              type="text"
+              class="form-control"
+              formControlName="apellidoMaterno"
+              placeholder="Ingresa el apellido materno"
+              [class.is-invalid]="
+                usuarioForm.get('apellidoMaterno')?.invalid &&
+                usuarioForm.get('apellidoMaterno')?.touched
+              "
+            />
+          </div>
+
+          @if (
+            usuarioForm.get("apellidoMaterno")?.hasError("pattern") &&
+            usuarioForm.get("apellidoMaterno")?.touched
+          ) {
+            <div class="text-danger small mt-1">
+              El apellido materno solo puede contener letras.
+            </div>
+          }
+        </div>
+
+        <!-- Correo -->
+        <div class="col-md-6">
+          <label for="correoElectronico" class="form-label fw-semibold">
+            Correo electrónico
+          </label>
+
+          <div class="input-group">
+            <span class="input-group-text">
+              <i class="bi bi-envelope-fill"></i>
+            </span>
+
+            <input
+              id="correoElectronico"
+              type="email"
+              class="form-control"
+              formControlName="correoElectronico"
+              placeholder="usuario@correo.com"
+              [class.is-invalid]="
+                usuarioForm.get('correoElectronico')?.invalid &&
+                usuarioForm.get('correoElectronico')?.touched
+              "
+            />
+          </div>
+
+          @if (
+            usuarioForm.get("correoElectronico")?.hasError("required") &&
+            usuarioForm.get("correoElectronico")?.touched
+          ) {
+            <div class="text-danger small mt-1">
+              El correo electrónico es obligatorio.
+            </div>
+          }
+
+          @if (
+            usuarioForm.get("correoElectronico")?.hasError("email") &&
+            usuarioForm.get("correoElectronico")?.touched
+          ) {
+            <div class="text-danger small mt-1">
+              Ingresa un correo electrónico válido.
+            </div>
+          }
+        </div>
+
+        <!-- Contraseña -->
+        <div class="col-md-6">
+          <label for="password" class="form-label fw-semibold">
+            Contraseña
+          </label>
+
+          <div class="input-group">
+            <span class="input-group-text">
+              <i class="bi bi-lock-fill"></i>
+            </span>
+
+            <input
+              id="password"
+              type="password"
+              class="form-control"
+              formControlName="password"
+              placeholder="Ingresa una contraseña"
+              [class.is-invalid]="
+                usuarioForm.get('password')?.invalid &&
+                usuarioForm.get('password')?.touched
+              "
+            />
+          </div>
+
+          @if (
+            usuarioForm.get("password")?.hasError("required") &&
+            usuarioForm.get("password")?.touched
+          ) {
+            <div class="text-danger small mt-1">
+              La contraseña es obligatoria.
+            </div>
+          }
+
+          @if (
+            usuarioForm.get("password")?.hasError("pattern") &&
+            usuarioForm.get("password")?.touched
+          ) {
+            <div class="text-danger small mt-1">
+              La contraseña debe tener al menos 8 caracteres, una mayúscula, una
+              minúscula, un número y un carácter especial.
+            </div>
+          }
+        </div>
+      </div>
+
+      <div class="d-flex justify-content-end gap-2 mt-4">
+        <button
+          type="button"
+          class="btn btn-outline-secondary"
+          (click)="cancelar()"
+        >
+          <i class="bi bi-x-circle me-2"></i>
+          Cancelar
+        </button>
+
+        <button
+          type="submit"
+          class="btn btn-primary"
+          [disabled]="usuarioForm.invalid"
+        >
+          <i class="bi bi-check-circle-fill me-2"></i>
+          Guardar
+        </button>
+      </div>
+    </form>
+  </div>
+</div>

@@ -19,6 +19,7 @@ namespace TaskManager.Server.Controllers
         }
 
         [HttpPost]
+        [Route("Add")]
         public async Task<IActionResult> Add([FromBody] UsuarioRegistroRequest request)
         {
             Result result = await _usuarioService.RegistroAsync(request);
