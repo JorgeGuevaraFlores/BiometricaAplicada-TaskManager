@@ -1,10 +1,21 @@
-import { Component, EventEmitter, Output, OnInit } from '@angular/core';
+import {
+  Component,
+  EventEmitter,
+  Input,
+  OnChanges,
+  OnInit,
+  Output,
+  SimpleChanges
+} from '@angular/core';
+
 import {
   FormBuilder,
   FormGroup,
   ReactiveFormsModule,
   Validators
 } from '@angular/forms';
+
+import { Tarea } from '../../../../core/models/tarea.model';
 
 import { TareaRequest } from '../../../../core/models/tarea-request.model';
 
@@ -23,7 +34,13 @@ import { PrioridadTareaService } from '../../../../core/services/prioridadTarea.
   templateUrl: './tarea-form.component.html',
   styleUrl: './tarea-form.component.css'
 })
-export class TareaFormComponent implements OnInit {
+export class TareaFormComponent implements OnInit, OnChanges {
+
+  @Input()
+  tarea: Tarea | null = null;
+
+  @Input()
+  modo: 'crear' | 'editar' = 'crear';
 
   @Output()
   guardarTarea = new EventEmitter<TareaRequest>();
@@ -72,6 +89,17 @@ export class TareaFormComponent implements OnInit {
     this.obtenerPrioridades();
   }
 
+  ngOnChanges(changes: SimpleChanges): void {
+    if (changes['tarea'] && this.tarea) {
+      this.tareaForm.patchValue({
+        titulo: this.tarea.titulo,
+        descripcion: this.tarea.descripcion,
+        idEstadoTarea: this.tarea.idEstadoTarea,
+        idPrioridadTarea: this.tarea.idPrioridadTarea
+      });
+    }
+  }
+
   obtenerEstados(): void {
     this.estadoTareaService.getAll().subscribe({
       next: (result) => {
@@ -113,7 +141,15 @@ export class TareaFormComponent implements OnInit {
       return;
     }
 
-    this.guardarTarea.emit(this.tareaForm.value);
+    const tareaRequest: TareaRequest = {
+      ...this.tareaForm.value
+    };
+
+    if (this.modo === 'editar' && this.tarea) {
+      tareaRequest.idTarea = this.tarea.idTarea;
+    }
+
+    this.guardarTarea.emit(tareaRequest);
   }
 
   cancelar(): void {

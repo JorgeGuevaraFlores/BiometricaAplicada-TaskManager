@@ -62,4 +62,17 @@ export class TareaService {
             `${this.apiUrl}/Delete/${idTarea}`
         );
     }
+
+    getById(idTarea: string): Observable<Result<Tarea>> {
+        return this.http.get<Result<Tarea>>(
+            `${this.apiUrl}/GetById/${idTarea}`
+        );
+    }
+
+    update(tarea: TareaRequest): Observable<Result<null>> {
+        return this.http.put<Result<null>>(
+            `${this.apiUrl}/Update`,
+            tarea
+        );
+    }
 }

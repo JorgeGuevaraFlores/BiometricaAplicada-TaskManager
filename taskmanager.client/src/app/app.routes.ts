@@ -9,6 +9,7 @@ import { UsuarioAddComponent } from './features/usuarios/pages/usuario-add/usuar
 import { UsuarioEditComponent } from './features/usuarios/pages/usuario-edit/usuario-edit.component';
 import { TareaListComponent } from './features/tareas/pages/tarea-list/tarea-list.component';
 import { TareaAddComponent } from './features/tareas/pages/tarea-add/tarea-add.component';
+import { TareaEditComponent } from './features/tareas/pages/tarea-edit/tarea-edit.component';
 
 export const routes: Routes = [
     {
@@ -42,6 +43,10 @@ export const routes: Routes = [
             {
                 path: 'tareas/agregar',
                 component: TareaAddComponent
+            },
+            {
+                path: 'tareas/editar/:id',
+                component: TareaEditComponent
             }
         ]
     },

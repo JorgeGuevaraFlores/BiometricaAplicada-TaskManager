@@ -85,14 +85,14 @@ namespace DL.Repositorios
 
             try
             {
-                List<TareaResponse> tareas = await _context.Database
-                    .SqlQueryRaw<TareaResponse>(
+                List<ML.DTOs.TareaDetalleResponse> tareas = await _context.Database
+                    .SqlQueryRaw<ML.DTOs.TareaDetalleResponse>(
                         "EXEC TareaGetById @IdTarea = {0}",
                         idTarea
                     )
                     .ToListAsync();
 
-                TareaResponse? tarea = tareas.FirstOrDefault();
+                ML.DTOs.TareaDetalleResponse? tarea = tareas.FirstOrDefault();
 
                 if (tarea != null)
                 {
@@ -126,14 +126,12 @@ namespace DL.Repositorios
                 @Titulo = {1},
                 @Descripcion = {2},
                 @IdEstadoTarea = {3},
-                @IdPrioridadTarea = {4},
-                @IdUsuario = {5}",
+                @IdPrioridadTarea = {4}",
                     request.IdTarea,
                     request.Titulo,
                     request.Descripcion ?? (object)DBNull.Value,
                     request.IdEstadoTarea,
-                    request.IdPrioridadTarea,
-                    idUsuario
+                    request.IdPrioridadTarea
                 );
 
                 result.Correct = true;
