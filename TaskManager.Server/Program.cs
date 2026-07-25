@@ -41,10 +41,9 @@ builder.Services.AddScoped<IAuthService, AuthService>();
 builder.Services.AddScoped<IJwtService, JwtService>();
 
 builder.Services.AddScoped<IUsuarioService, UsuarioService>();
-builder.Services.AddScoped<IUsuarioService, UsuarioService>();
 
-builder.Services.AddScoped<IUsuarioRepositorio, UsuarioRepositorio>();
-builder.Services.AddScoped<IUsuarioService, UsuarioService>();
+builder.Services.AddScoped<ITareaRepositorio, TareaRepositorio>();
+builder.Services.AddScoped<ITareaService, TareaService>();
 
 builder.Services.AddScoped<IUsuarioRepositorio, UsuarioRepositorio>();
 
