@@ -74,5 +74,18 @@ namespace TaskManager.Server.Controllers
             return BadRequest(result);
         }
 
+        [HttpDelete]
+        [Route("Delete/{idUsuario}")]
+        public async Task<IActionResult> Eliminar(Guid idUsuario)
+        {
+            Result result = await _usuarioService.DeleteAsync(idUsuario);
+
+            if (result.Correct)
+            {
+                return Ok(result);
+            }
+
+            return BadRequest(result);
+        }
     }
 }

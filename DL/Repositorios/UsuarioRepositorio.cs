@@ -185,5 +185,26 @@ namespace DL.Repositorios
             return result;
         }
 
+        public async Task<Result> DeleteAsync(Guid idUsuario)
+        {
+            Result result = new Result();
+
+            try
+            {
+                int filasAfectadas = await _context.Database.ExecuteSqlRawAsync(
+                    "EXEC UsuarioDelete @IdUsuario = {0}",
+                    idUsuario
+                );
+
+                result.Correct = filasAfectadas > 0;
+            }
+            catch (Exception ex)
+            {
+                result.Correct = false;
+                result.ErrorMessage = ex.Message;
+            }
+
+            return result;
+        }
     }
 }

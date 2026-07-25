@@ -146,5 +146,23 @@ namespace BL.Servicios
             return result;
         }
 
+
+        public async Task<Result> DeleteAsync(Guid idUsuario)
+        {
+            Result result = new Result();
+
+            try
+            {
+                result = await _usuarioRepositorio.DeleteAsync(idUsuario);
+            }
+            catch (Exception ex)
+            {
+                result.Correct = false;
+                result.ErrorMessage = ex.Message;
+            }
+
+            return result;
+        }
+
     }
 }

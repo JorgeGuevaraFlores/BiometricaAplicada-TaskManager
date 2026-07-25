@@ -36,4 +36,25 @@ export class UsuarioListComponent implements OnInit {
       }
     });
   }
+
+  eliminarUsuario(idUsuario: string): void {
+    const confirmar = confirm(
+      '¿Estás seguro de que deseas eliminar este usuario?'
+    );
+
+    if (!confirmar) {
+      return;
+    }
+
+    this.usuarioService.delete(idUsuario).subscribe({
+      next: (result) => {
+        if (result.correct) {
+          this.obtenerUsuarios();
+        }
+      },
+      error: (error) => {
+        console.error('Error al eliminar el usuario:', error);
+      }
+    });
+  }
 }

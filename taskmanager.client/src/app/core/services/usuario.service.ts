@@ -58,4 +58,13 @@ export class UsuarioService {
     );
   }
 
+  delete(idUsuario: string): Observable<Result<null>> {
+    return this.http.delete<Result<null>>(
+      `${this.apiUrl}/Delete/${idUsuario}`,
+      {
+        withCredentials: true
+      }
+    );
+  }
+
 }
