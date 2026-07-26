@@ -15,7 +15,10 @@ import {
 
 import { AuthService } from '../services/auth.service';
 
-export const authInterceptor: HttpInterceptorFn = (request, next) => {
+export const authInterceptor: HttpInterceptorFn = (
+  request,
+  next
+) => {
   const authService = inject(AuthService);
   const router = inject(Router);
 
@@ -25,19 +28,22 @@ export const authInterceptor: HttpInterceptorFn = (request, next) => {
 
   return next(requestConCredenciales).pipe(
     catchError((error: HttpErrorResponse) => {
+      const url = request.url.toLowerCase();
+
       const esLogin =
-        request.url.includes('/Login');
+        url.includes('/login');
 
       const esRefreshToken =
-        request.url.includes('/RefreshToken');
+        url.includes('/refreshtoken');
 
-      const esValidacionSesion =
-        request.url.includes('/ValidateSession');
+      const esLogout =
+        url.includes('/logout');
 
       if (
         error.status !== 401 ||
         esLogin ||
-        esRefreshToken
+        esRefreshToken ||
+        esLogout
       ) {
         return throwError(() => error);
       }
@@ -46,10 +52,6 @@ export const authInterceptor: HttpInterceptorFn = (request, next) => {
         switchMap(resultado => {
           if (!resultado.correct) {
             authService.marcarSesionCerrada();
-
-            if (!esValidacionSesion) {
-              router.navigate(['/login']);
-            }
 
             return throwError(
               () => new Error(
@@ -72,11 +74,9 @@ export const authInterceptor: HttpInterceptorFn = (request, next) => {
         catchError(errorRefresh => {
           authService.marcarSesionCerrada();
 
-          /*
-           * ValidateSession también se usa en el Home/navbar.
-           * Si no existe sesión, no queremos mandar automáticamente
-           * al login desde una página pública.
-           */
+          const esValidacionSesion =
+            url.includes('/validatesession');
+
           if (!esValidacionSesion) {
             router.navigate(['/login']);
           }

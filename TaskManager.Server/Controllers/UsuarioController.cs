@@ -111,8 +111,7 @@ namespace TaskManager.Server.Controllers
                     Imagen = imagen
                 };
 
-            Result result =
-                await _usuarioService.UpdateAsync(usuario);
+            Result result = await _usuarioService.UpdateAsync(usuario);
 
             if (result.Correct)
             {
