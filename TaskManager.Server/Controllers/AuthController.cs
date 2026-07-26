@@ -155,5 +155,50 @@ namespace TaskManager.Server.Controllers
             });
         }
 
+        [HttpPost]
+        [Route("Logout")]
+        public async Task<IActionResult> Logout()
+        {
+            string? refreshToken =
+                Request.Cookies["refresh_token"];
+
+            if (!string.IsNullOrWhiteSpace(refreshToken))
+            {
+                Result resultadoRevocacion =
+                    await _tokenActualizacionService.RevokeAsync(
+                        refreshToken
+                    );
+
+                if (!resultadoRevocacion.Correct)
+                {
+                    return StatusCode(
+                        StatusCodes.Status500InternalServerError,
+                        resultadoRevocacion
+                    );
+                }
+            }
+
+            CookieOptions opcionesCookie = new CookieOptions
+            {
+                HttpOnly = true,
+                Secure = true,
+                SameSite = SameSiteMode.None
+            };
+
+            Response.Cookies.Delete(
+                "access_token",
+                opcionesCookie
+            );
+
+            Response.Cookies.Delete(
+                "refresh_token",
+                opcionesCookie
+            );
+
+            return Ok(new Result
+            {
+                Correct = true
+            });
+        }
     }
 }

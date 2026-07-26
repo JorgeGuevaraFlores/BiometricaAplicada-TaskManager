@@ -57,4 +57,22 @@ export class AuthService {
       {}
     );
   }
+
+  logout(): Observable<Result<null>> {
+    return this.http.post<Result<null>>(
+      `${this.apiUrl}/Logout`,
+      {}
+    ).pipe(
+      tap({
+        next: result => {
+          if (result.correct) {
+            this.marcarSesionCerrada();
+          }
+        },
+        error: () => {
+          this.marcarSesionCerrada();
+        }
+      })
+    );
+  }
 }
