@@ -2,7 +2,10 @@ import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 
 import { UsuarioFormComponent } from '../../components/usuario-form/usuario-form.component';
+
 import { UsuarioService } from '../../../../core/services/usuario.service';
+import { AlertaService } from '../../../../core/services/alerta.service';
+
 import { Usuario } from '../../../../core/models/usuario.model';
 import { UsuarioRequest } from '../../../../core/models/usuario-request.model';
 
@@ -24,6 +27,7 @@ export class UsuarioEditComponent implements OnInit {
   constructor(
     private readonly activatedRoute: ActivatedRoute,
     private readonly usuarioService: UsuarioService,
+    private readonly alertaService: AlertaService,
     private readonly router: Router
   ) { }
 
@@ -36,38 +40,50 @@ export class UsuarioEditComponent implements OnInit {
       this.activatedRoute.snapshot.paramMap.get('id') ?? '';
 
     if (!this.idUsuario) {
-      alert(
-        'No se proporcionó un identificador de usuario.'
-      );
+      this.alertaService.error(
+        'Usuario no encontrado',
+        'No se proporcionó un identificador de usuario válido.'
+      ).then(() => {
+        this.router.navigate(['/usuarios']);
+      });
 
-      this.router.navigate(['/usuarios']);
       return;
     }
 
     this.usuarioService.obtenerPorId(this.idUsuario)
       .subscribe({
-        next: result => {
+        next: async result => {
           if (result.correct && result.object) {
             this.usuario = result.object;
-          } else {
-            alert(
-              result.errorMessage ??
-              'Usuario no encontrado.'
-            );
-
-            this.router.navigate(['/usuarios']);
+            this.cargando = false;
+            return;
           }
 
           this.cargando = false;
-        },
-        error: error => {
-          console.error(error);
 
-          alert(
-            'Ocurrió un error al consultar el usuario.'
+          await this.alertaService.error(
+            'Usuario no encontrado',
+            result.errorMessage ??
+            'No fue posible obtener la información del usuario.'
+          );
+
+          this.router.navigate(['/usuarios']);
+        },
+
+        error: async error => {
+          console.error(
+            'Error al consultar el usuario:',
+            error
           );
 
           this.cargando = false;
+
+          await this.alertaService.error(
+            'Error al consultar',
+            error.error?.errorMessage ??
+            'Ocurrió un error al consultar el usuario.'
+          );
+
           this.router.navigate(['/usuarios']);
         }
       });
@@ -84,25 +100,33 @@ export class UsuarioEditComponent implements OnInit {
       this.idUsuario,
       usuarioRequest
     ).subscribe({
-      next: result => {
+      next: async result => {
         if (result.correct) {
-          alert(
-            'Usuario actualizado correctamente.'
+          await this.alertaService.exito(
+            'Usuario actualizado',
+            'El usuario se actualizó correctamente.'
           );
 
           this.router.navigate(['/usuarios']);
           return;
         }
 
-        alert(
+        await this.alertaService.error(
+          'No fue posible actualizar',
           result.errorMessage ??
           'No fue posible actualizar el usuario.'
         );
       },
-      error: error => {
-        console.error(error);
 
-        alert(
+      error: async error => {
+        console.error(
+          'Error al actualizar el usuario:',
+          error
+        );
+
+        await this.alertaService.error(
+          'Error al actualizar',
+          error.error?.errorMessage ??
           'Ocurrió un error al actualizar el usuario.'
         );
       }

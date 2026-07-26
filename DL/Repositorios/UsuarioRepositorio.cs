@@ -1,8 +1,10 @@
-﻿using Microsoft.EntityFrameworkCore;
+﻿using Microsoft.Data.SqlClient;
+using Microsoft.EntityFrameworkCore;
 using ML;
 using ML.DTOs;
 using System;
 using System.Collections.Generic;
+using System.Data;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -155,36 +157,86 @@ namespace DL.Repositorios
             return result;
         }
 
-        public async Task<Result> UpdateAsync(ML.Usuario usuario)
+
+        public async Task<ML.Result> UpdateAsync(ML.Usuario usuario)
         {
-            Result result = new Result();
+            ML.Result result = new ML.Result();
 
             try
             {
-                int filasAfectadas = await _context.Database.ExecuteSqlRawAsync(
-                    @"EXEC UsuarioUpdate
-                @IdUsuario = {0},
-                @Nombre = {1},
-                @ApellidoPaterno = {2},
-                @ApellidoMaterno = {3},
-                @CorreoElectronico = {4},
-                @PasswordHash = {5},
-                @Imagen = {6}",
-                    usuario.IdUsuario,
-                    usuario.Nombre,
-                    usuario.ApellidoPaterno,
-                    usuario.ApellidoMaterno,
-                    usuario.CorreoElectronico,
-                    usuario.PasswordHash,
-                    usuario.Imagen
+                SqlParameter idUsuarioParameter = new(
+                    "@IdUsuario",
+                    usuario.IdUsuario
                 );
 
-                result.Correct = filasAfectadas >= 0;
+                SqlParameter nombreParameter = new(
+                    "@Nombre",
+                    usuario.Nombre
+                );
+
+                SqlParameter apellidoPaternoParameter = new(
+                    "@ApellidoPaterno",
+                    usuario.ApellidoPaterno
+                );
+
+                SqlParameter apellidoMaternoParameter = new(
+                    "@ApellidoMaterno",
+                    (object?)usuario.ApellidoMaterno ?? DBNull.Value
+                );
+
+                SqlParameter correoParameter = new(
+                    "@CorreoElectronico",
+                    usuario.CorreoElectronico
+                );
+
+                SqlParameter passwordParameter = new(
+                    "@PasswordHash",
+                    (object?)usuario.PasswordHash ?? DBNull.Value
+                );
+
+                SqlParameter imagenParameter = new(
+                    "@Imagen",
+                    SqlDbType.VarBinary,
+                    -1
+                )
+                {
+                    Value = usuario.Imagen is { Length: > 0 }
+                        ? usuario.Imagen
+                        : DBNull.Value
+                };
+
+                int filasAfectadas =
+                    await _context.Database.ExecuteSqlRawAsync(
+                        @"EXEC UsuarioUpdate
+                    @IdUsuario,
+                    @Nombre,
+                    @ApellidoPaterno,
+                    @ApellidoMaterno,
+                    @CorreoElectronico,
+                    @PasswordHash,
+                    @Imagen",
+                        idUsuarioParameter,
+                        nombreParameter,
+                        apellidoPaternoParameter,
+                        apellidoMaternoParameter,
+                        correoParameter,
+                        passwordParameter,
+                        imagenParameter
+                    );
+
+                result.Correct = filasAfectadas > 0;
+
+                if (!result.Correct)
+                {
+                    result.ErrorMessage =
+                        "No fue posible actualizar el usuario.";
+                }
             }
             catch (Exception ex)
             {
                 result.Correct = false;
                 result.ErrorMessage = ex.Message;
+                result.Ex = ex;
             }
 
             return result;

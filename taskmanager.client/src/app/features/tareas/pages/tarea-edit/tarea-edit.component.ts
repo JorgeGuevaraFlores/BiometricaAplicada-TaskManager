@@ -5,7 +5,9 @@ import { TareaFormComponent } from '../../components/tarea-form/tarea-form.compo
 
 import { Tarea } from '../../../../core/models/tarea.model';
 import { TareaRequest } from '../../../../core/models/tarea-request.model';
+
 import { TareaService } from '../../../../core/services/tarea.service';
+import { AlertaService } from '../../../../core/services/alerta.service';
 
 @Component({
   selector: 'app-tarea-edit',
@@ -24,9 +26,10 @@ export class TareaEditComponent implements OnInit {
   errorMessage: string | null = null;
 
   constructor(
-    private activatedRoute: ActivatedRoute,
-    private tareaService: TareaService,
-    private router: Router
+    private readonly activatedRoute: ActivatedRoute,
+    private readonly tareaService: TareaService,
+    private readonly alertaService: AlertaService,
+    private readonly router: Router
   ) { }
 
   ngOnInit(): void {
@@ -34,7 +37,13 @@ export class TareaEditComponent implements OnInit {
       this.activatedRoute.snapshot.paramMap.get('id');
 
     if (!idTarea) {
-      this.router.navigate(['/tareas']);
+      this.alertaService.error(
+        'Tarea no encontrada',
+        'No se proporcionó un identificador de tarea válido.'
+      ).then(() => {
+        this.router.navigate(['/tareas']);
+      });
+
       return;
     }
 
@@ -46,27 +55,39 @@ export class TareaEditComponent implements OnInit {
     this.errorMessage = null;
 
     this.tareaService.getById(idTarea).subscribe({
-      next: (result) => {
+      next: async result => {
         if (result.correct && result.object) {
           this.tarea = result.object;
-        } else {
-          this.errorMessage =
-            result.errorMessage ??
-            'No fue posible obtener la tarea.';
+          this.cargando = false;
+          return;
         }
 
         this.cargando = false;
+
+        await this.alertaService.error(
+          'No fue posible consultar la tarea',
+          result.errorMessage ??
+          'No fue posible obtener la tarea.'
+        );
+
+        this.router.navigate(['/tareas']);
       },
-      error: (error) => {
+
+      error: async error => {
         console.error(
           'Error al obtener la tarea:',
           error
         );
 
-        this.errorMessage =
-          'Ocurrió un error al consultar la tarea.';
-
         this.cargando = false;
+
+        await this.alertaService.error(
+          'Error al consultar',
+          error.error?.errorMessage ??
+          'Ocurrió un error al consultar la tarea.'
+        );
+
+        this.router.navigate(['/tareas']);
       }
     });
   }
@@ -82,23 +103,35 @@ export class TareaEditComponent implements OnInit {
     };
 
     this.tareaService.update(tareaActualizar).subscribe({
-      next: (result) => {
+      next: async result => {
         if (result.correct) {
+          await this.alertaService.exito(
+            'Tarea actualizada',
+            'La tarea se actualizó correctamente.'
+          );
+
           this.router.navigate(['/tareas']);
-        } else {
-          this.errorMessage =
-            result.errorMessage ??
-            'No fue posible actualizar la tarea.';
+          return;
         }
+
+        await this.alertaService.error(
+          'No fue posible actualizar',
+          result.errorMessage ??
+          'No fue posible actualizar la tarea.'
+        );
       },
-      error: (error) => {
+
+      error: async error => {
         console.error(
           'Error al actualizar la tarea:',
           error
         );
 
-        this.errorMessage =
-          'Ocurrió un error al actualizar la tarea.';
+        await this.alertaService.error(
+          'Error al actualizar',
+          error.error?.errorMessage ??
+          'Ocurrió un error al actualizar la tarea.'
+        );
       }
     });
   }

@@ -4,12 +4,12 @@ import { RouterLink } from '@angular/router';
 
 import { Tarea } from '../../../../core/models/tarea.model';
 import { PrioridadTarea } from '../../../../core/models/prioridadTarea.model';
+import { EstadoTarea } from '../../../../core/models/estadoTarea.model';
 
 import { TareaService } from '../../../../core/services/tarea.service';
 import { PrioridadTareaService } from '../../../../core/services/prioridadTarea.service';
-
-import { EstadoTarea } from '../../../../core/models/estadoTarea.model';
 import { EstadoTareaService } from '../../../../core/services/estadoTarea.service';
+import { AlertaService } from '../../../../core/services/alerta.service';
 
 @Component({
   selector: 'app-tarea-list',
@@ -35,9 +35,10 @@ export class TareaListComponent implements OnInit {
   errorMessage: string | null = null;
 
   constructor(
-    private tareaService: TareaService,
-    private prioridadTareaService: PrioridadTareaService,
-    private estadoTareaService: EstadoTareaService
+    private readonly tareaService: TareaService,
+    private readonly prioridadTareaService: PrioridadTareaService,
+    private readonly estadoTareaService: EstadoTareaService,
+    private readonly alertaService: AlertaService
   ) { }
 
   ngOnInit(): void {
@@ -63,7 +64,7 @@ export class TareaListComponent implements OnInit {
     this.tareaService
       .getAll(prioridad, estado)
       .subscribe({
-        next: (result) => {
+        next: result => {
           if (result.correct) {
             this.tareas = result.objects ?? [];
           } else {
@@ -74,7 +75,7 @@ export class TareaListComponent implements OnInit {
 
           this.cargando = false;
         },
-        error: (error) => {
+        error: error => {
           console.error(
             'Error al obtener las tareas:',
             error
@@ -90,12 +91,12 @@ export class TareaListComponent implements OnInit {
 
   obtenerPrioridades(): void {
     this.prioridadTareaService.getAll().subscribe({
-      next: (result) => {
+      next: result => {
         if (result.correct) {
           this.prioridades = result.objects ?? [];
         }
       },
-      error: (error) => {
+      error: error => {
         console.error(
           'Error al obtener las prioridades:',
           error
@@ -106,12 +107,12 @@ export class TareaListComponent implements OnInit {
 
   obtenerEstados(): void {
     this.estadoTareaService.getAll().subscribe({
-      next: (result) => {
+      next: result => {
         if (result.correct) {
           this.estados = result.objects ?? [];
         }
       },
-      error: (error) => {
+      error: error => {
         console.error(
           'Error al obtener los estados:',
           error
@@ -120,13 +121,11 @@ export class TareaListComponent implements OnInit {
     });
   }
 
-
   cambiarFiltroPrioridad(event: Event): void {
     const select = event.target as HTMLSelectElement;
 
-    this.idPrioridadSeleccionada = Number(
-      select.value
-    );
+    this.idPrioridadSeleccionada =
+      Number(select.value);
 
     this.obtenerTareas();
   }
@@ -134,35 +133,56 @@ export class TareaListComponent implements OnInit {
   cambiarFiltroEstado(event: Event): void {
     const select = event.target as HTMLSelectElement;
 
-    this.idEstadoSeleccionado = Number(
-      select.value
-    );
+    this.idEstadoSeleccionado =
+      Number(select.value);
 
     this.obtenerTareas();
   }
 
-  eliminarTarea(idTarea: string): void {
-    const confirmar = confirm(
-      '¿Estás seguro de que deseas eliminar esta tarea?'
-    );
+  async eliminarTarea(idTarea: string): Promise<void> {
+    const confirmacion =
+      await this.alertaService.confirmar(
+        'Eliminar tarea',
+        '¿Estás seguro de que deseas eliminar esta tarea?',
+        'Sí, eliminar',
+        'Cancelar'
+      );
 
-    if (!confirmar) {
+    if (!confirmacion.isConfirmed) {
       return;
     }
 
     this.tareaService.delete(idTarea).subscribe({
-      next: (result) => {
+      next: async result => {
         if (result.correct) {
+          await this.alertaService.exito(
+            'Tarea eliminada',
+            'La tarea se eliminó correctamente.'
+          );
+
           this.obtenerTareas();
+          return;
         }
+
+        await this.alertaService.error(
+          'No fue posible eliminar',
+          result.errorMessage ??
+          'No fue posible eliminar la tarea.'
+        );
       },
-      error: (error) => {
+
+      error: async error => {
         console.error(
           'Error al eliminar la tarea:',
           error
         );
+
+        await this.alertaService.error(
+          'Error al eliminar',
+          error.error?.errorMessage ??
+          'Ocurrió un error al eliminar la tarea.'
+        );
       }
     });
   }
-
 }
