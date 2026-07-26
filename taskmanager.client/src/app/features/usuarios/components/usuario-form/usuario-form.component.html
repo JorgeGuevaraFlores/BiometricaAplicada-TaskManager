@@ -2,6 +2,56 @@
   <div class="card-body p-4">
     <form [formGroup]="usuarioForm" (ngSubmit)="guardar()" novalidate>
       <div class="row g-4">
+        <!-- Imagen de perfil -->
+        <div class="col-12">
+          <label for="imagen" class="form-label fw-semibold">
+            Imagen de perfil
+          </label>
+
+          <div class="row align-items-center g-3">
+            <div class="col-md-auto">
+              <div class="imagen-preview-container">
+                @if (imagenPrevisualizacion) {
+                  <img
+                    [src]="imagenPrevisualizacion"
+                    alt="Previsualización de la imagen de perfil"
+                    class="imagen-preview"
+                  />
+                } @else {
+                  <div class="imagen-placeholder">
+                    <i class="bi bi-person-fill"></i>
+                  </div>
+                }
+              </div>
+            </div>
+
+            <div class="col-md">
+              <div class="input-group">
+                <span class="input-group-text">
+                  <i class="bi bi-image-fill"></i>
+                </span>
+
+                <input
+                  id="imagen"
+                  type="file"
+                  class="form-control"
+                  accept="image/*"
+                  (change)="seleccionarImagen($event)"
+                  [class.is-invalid]="mensajeErrorImagen"
+                />
+              </div>
+
+              <div class="form-text">Selecciona un archivo de imagen.</div>
+
+              @if (mensajeErrorImagen) {
+                <div class="text-danger small mt-1">
+                  {{ mensajeErrorImagen }}
+                </div>
+              }
+            </div>
+          </div>
+        </div>
+
         <!-- Nombre -->
         <div class="col-md-6">
           <label for="nombre" class="form-label fw-semibold"> Nombre </label>
@@ -219,7 +269,7 @@
         <button
           type="submit"
           class="btn btn-primary"
-          [disabled]="usuarioForm.invalid"
+          [disabled]="usuarioForm.invalid || !!mensajeErrorImagen"
         >
           <i class="bi bi-check-circle-fill me-2"></i>
           Guardar

@@ -37,6 +37,7 @@ namespace BL.Servicios
 
                 usuario.CorreoElectronico = request.CorreoElectronico.Trim().ToLower();
                 usuario.PasswordHash = passwordHash;
+                usuario.Imagen = request.Imagen;
 
                 result = await _usuarioRepositorio.AgregarAsync(usuario);
 
@@ -134,6 +135,7 @@ namespace BL.Servicios
 
                 usuario.CorreoElectronico = usuarioRequest.CorreoElectronico.Trim().ToLower();
                 usuario.PasswordHash = passwordHash;
+                usuario.Imagen = usuarioRequest.Imagen;
 
                 result = await _usuarioRepositorio.UpdateAsync(usuario);
             }

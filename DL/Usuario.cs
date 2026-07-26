@@ -21,6 +21,8 @@ public partial class Usuario
 
     public bool Activo { get; set; }
 
+    public byte[]? Imagen { get; set; }
+
     public virtual ICollection<Tarea> Tareas { get; set; } = new List<Tarea>();
 
     public virtual ICollection<TokenActualizacion> TokenActualizacions { get; set; } = new List<TokenActualizacion>();

@@ -5,4 +5,5 @@ export interface UsuarioRequest {
   apellidoMaterno?: string;
   correoElectronico: string;
   password: string;
+  imagen: File | null;
 }

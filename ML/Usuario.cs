@@ -23,5 +23,6 @@ namespace ML
         public DateTime FechaCreacion { get; set; }
 
         public bool Activo { get; set; }
+        public byte[]? Imagen { get; set; }
     }
 }

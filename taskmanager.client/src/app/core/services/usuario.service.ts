@@ -30,9 +30,31 @@ export class UsuarioService {
   }
 
   agregar(usuario: UsuarioRequest): Observable<Result<Usuario>> {
+    const formData = new FormData();
+
+    formData.append('nombre', usuario.nombre);
+    formData.append('apellidoPaterno', usuario.apellidoPaterno);
+    formData.append(
+      'apellidoMaterno',
+      usuario.apellidoMaterno ?? ''
+    );
+    formData.append(
+      'correoElectronico',
+      usuario.correoElectronico
+    );
+    formData.append('password', usuario.password);
+
+    if (usuario.imagen) {
+      formData.append(
+        'imagen',
+        usuario.imagen,
+        usuario.imagen.name
+      );
+    }
+
     return this.http.post<Result<Usuario>>(
       `${this.apiUrl}/add`,
-      usuario,
+      formData,
       {
         withCredentials: true
       }
@@ -48,10 +70,39 @@ export class UsuarioService {
     );
   }
 
-  update(usuario: UsuarioRequest): Observable<Result<Usuario>> {
+  update(
+    idUsuario: string,
+    usuario: UsuarioRequest
+  ): Observable<Result<Usuario>> {
+    const formData = new FormData();
+
+    formData.append('idUsuario', idUsuario);
+    formData.append('nombre', usuario.nombre);
+    formData.append('apellidoPaterno', usuario.apellidoPaterno);
+    formData.append(
+      'apellidoMaterno',
+      usuario.apellidoMaterno ?? ''
+    );
+    formData.append(
+      'correoElectronico',
+      usuario.correoElectronico
+    );
+    formData.append(
+      'password',
+      usuario.password ?? ''
+    );
+
+    if (usuario.imagen) {
+      formData.append(
+        'imagen',
+        usuario.imagen,
+        usuario.imagen.name
+      );
+    }
+
     return this.http.put<Result<Usuario>>(
       `${this.apiUrl}/Update`,
-      usuario,
+      formData,
       {
         withCredentials: true
       }

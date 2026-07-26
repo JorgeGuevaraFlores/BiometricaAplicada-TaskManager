@@ -66,13 +66,15 @@ namespace DL.Repositorios
 
             try
             {
-                var filasAfectadas = await _context.Database.ExecuteSqlInterpolatedAsync($@"
-                    EXEC UsuarioAdd
-                        @Nombre = {usuario.Nombre},
-                        @ApellidoPaterno = {usuario.ApellidoPaterno},
-                        @ApellidoMaterno = {usuario.ApellidoMaterno},
-                        @CorreoElectronico = {usuario.CorreoElectronico},
-                        @PasswordHash = {usuario.PasswordHash}");
+                int filasAfectadas =
+                    await _context.Database.ExecuteSqlInterpolatedAsync($@"
+                EXEC UsuarioAdd
+                    @Nombre = {usuario.Nombre},
+                    @ApellidoPaterno = {usuario.ApellidoPaterno},
+                    @ApellidoMaterno = {usuario.ApellidoMaterno},
+                    @CorreoElectronico = {usuario.CorreoElectronico},
+                    @PasswordHash = {usuario.PasswordHash},
+                    @Imagen = {usuario.Imagen}");
 
                 if (filasAfectadas > 0)
                 {
@@ -81,7 +83,8 @@ namespace DL.Repositorios
                 else
                 {
                     result.Correct = false;
-                    result.ErrorMessage = "No fue posible registrar el usuario.";
+                    result.ErrorMessage =
+                        "No fue posible registrar el usuario.";
                 }
             }
             catch (Exception ex)
@@ -165,13 +168,15 @@ namespace DL.Repositorios
                 @ApellidoPaterno = {2},
                 @ApellidoMaterno = {3},
                 @CorreoElectronico = {4},
-                @PasswordHash = {5}",
+                @PasswordHash = {5},
+                @Imagen = {6}",
                     usuario.IdUsuario,
                     usuario.Nombre,
                     usuario.ApellidoPaterno,
                     usuario.ApellidoMaterno,
                     usuario.CorreoElectronico,
-                    usuario.PasswordHash
+                    usuario.PasswordHash,
+                    usuario.Imagen
                 );
 
                 result.Correct = filasAfectadas >= 0;
@@ -207,10 +212,7 @@ namespace DL.Repositorios
             return result;
         }
 
-        public async Task<Result> ActualizarEstatusAsync(
-    Guid idUsuario,
-    bool activo
-)
+        public async Task<Result> ActualizarEstatusAsync(Guid idUsuario, bool activo)
         {
             Result result = new Result();
 

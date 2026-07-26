@@ -1,0 +1,27 @@
+.usuario-imagen-contenedor {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.usuario-imagen,
+.usuario-imagen-placeholder {
+  width: 70px;
+  height: 70px;
+  border-radius: 50%;
+}
+
+.usuario-imagen {
+  display: block;
+  object-fit: cover;
+  border: 2px solid #dee2e6;
+}
+
+.usuario-imagen-placeholder {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background-color: #e9ecef;
+  color: #6c757d;
+  font-size: 1.5rem;
+}

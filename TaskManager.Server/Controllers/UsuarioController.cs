@@ -4,6 +4,7 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using ML;
 using ML.DTOs;
+using TaskManager.Server.Models;
 
 namespace TaskManager.Server.Controllers
 {
@@ -22,8 +23,29 @@ namespace TaskManager.Server.Controllers
 
         [HttpPost]
         [Route("Add")]
-        public async Task<IActionResult> Add([FromBody] UsuarioRegistroRequest request)
+        public async Task<IActionResult> Add([FromForm] UsuarioRegistroFormRequest formRequest)
         {
+            byte[]? imagen = null;
+
+            if (formRequest.Imagen != null)
+            {
+                using MemoryStream memoryStream = new MemoryStream();
+
+                await formRequest.Imagen.CopyToAsync(memoryStream);
+
+                imagen = memoryStream.ToArray();
+            }
+
+            UsuarioRegistroRequest request = new UsuarioRegistroRequest
+            {
+                Nombre = formRequest.Nombre,
+                ApellidoPaterno = formRequest.ApellidoPaterno,
+                ApellidoMaterno = formRequest.ApellidoMaterno,
+                CorreoElectronico = formRequest.CorreoElectronico,
+                Password = formRequest.Password,
+                Imagen = imagen
+            };
+
             Result result = await _usuarioService.RegistroAsync(request);
 
             if (result.Correct)
@@ -64,9 +86,33 @@ namespace TaskManager.Server.Controllers
 
         [HttpPut]
         [Route("Update")]
-        public async Task<IActionResult> Actualizar([FromBody] UsuarioRegistroRequest usuario)
+        public async Task<IActionResult> Actualizar([FromForm] UsuarioRegistroFormRequest formRequest)
         {
-            Result result = await _usuarioService.UpdateAsync(usuario);
+            byte[]? imagen = null;
+
+            if (formRequest.Imagen != null)
+            {
+                using MemoryStream memoryStream = new MemoryStream();
+
+                await formRequest.Imagen.CopyToAsync(memoryStream);
+
+                imagen = memoryStream.ToArray();
+            }
+
+            UsuarioRegistroRequest usuario =
+                new UsuarioRegistroRequest
+                {
+                    IdUsuario = formRequest.IdUsuario,
+                    Nombre = formRequest.Nombre,
+                    ApellidoPaterno = formRequest.ApellidoPaterno,
+                    ApellidoMaterno = formRequest.ApellidoMaterno,
+                    CorreoElectronico = formRequest.CorreoElectronico,
+                    Password = formRequest.Password,
+                    Imagen = imagen
+                };
+
+            Result result =
+                await _usuarioService.UpdateAsync(usuario);
 
             if (result.Correct)
             {

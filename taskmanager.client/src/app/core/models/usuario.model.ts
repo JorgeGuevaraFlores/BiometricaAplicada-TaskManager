@@ -6,4 +6,5 @@ export interface Usuario {
   correoElectronico: string;
   fechaCreacion: Date;
   activo: boolean;
+  imagen: string | null;
 }

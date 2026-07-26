@@ -36,7 +36,9 @@ export class UsuarioEditComponent implements OnInit {
       this.activatedRoute.snapshot.paramMap.get('id') ?? '';
 
     if (!this.idUsuario) {
-      alert('No se proporcionó un identificador de usuario.');
+      alert(
+        'No se proporcionó un identificador de usuario.'
+      );
 
       this.router.navigate(['/usuarios']);
       return;
@@ -44,20 +46,26 @@ export class UsuarioEditComponent implements OnInit {
 
     this.usuarioService.obtenerPorId(this.idUsuario)
       .subscribe({
-        next: (result) => {
+        next: result => {
           if (result.correct && result.object) {
             this.usuario = result.object;
           } else {
-            alert(result.errorMessage ?? 'Usuario no encontrado.');
+            alert(
+              result.errorMessage ??
+              'Usuario no encontrado.'
+            );
+
             this.router.navigate(['/usuarios']);
           }
 
           this.cargando = false;
         },
-        error: (error) => {
+        error: error => {
           console.error(error);
 
-          alert('Ocurrió un error al consultar el usuario.');
+          alert(
+            'Ocurrió un error al consultar el usuario.'
+          );
 
           this.cargando = false;
           this.router.navigate(['/usuarios']);
@@ -65,24 +73,38 @@ export class UsuarioEditComponent implements OnInit {
       });
   }
 
-  actualizarUsuario(usuarioRequest: UsuarioRequest): void {
-    if (!this.usuario) {
+  actualizarUsuario(
+    usuarioRequest: UsuarioRequest
+  ): void {
+    if (!this.idUsuario) {
       return;
     }
 
-    const usuarioActualizar: UsuarioRequest = {
-      ...usuarioRequest,
-      idUsuario: this.usuario.idUsuario
-    };
-
-    this.usuarioService.update(usuarioActualizar).subscribe({
-      next: (result) => {
+    this.usuarioService.update(
+      this.idUsuario,
+      usuarioRequest
+    ).subscribe({
+      next: result => {
         if (result.correct) {
+          alert(
+            'Usuario actualizado correctamente.'
+          );
+
           this.router.navigate(['/usuarios']);
+          return;
         }
+
+        alert(
+          result.errorMessage ??
+          'No fue posible actualizar el usuario.'
+        );
       },
-      error: (error) => {
-        console.error('Error al actualizar el usuario:', error);
+      error: error => {
+        console.error(error);
+
+        alert(
+          'Ocurrió un error al actualizar el usuario.'
+        );
       }
     });
   }

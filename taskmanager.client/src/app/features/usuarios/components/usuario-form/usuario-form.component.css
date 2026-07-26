@@ -1,0 +1,27 @@
+.imagen-preview-container {
+  width: 140px;
+  height: 140px;
+}
+
+.imagen-preview,
+.imagen-placeholder {
+  width: 140px;
+  height: 140px;
+  border-radius: 50%;
+}
+
+.imagen-preview {
+  object-fit: cover;
+  border: 4px solid #ffffff;
+  box-shadow: 0 0.25rem 1rem rgba(0, 0, 0, 0.15);
+}
+
+.imagen-placeholder {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background-color: #e9ecef;
+  border: 2px dashed #adb5bd;
+  color: #6c757d;
+  font-size: 4rem;
+}

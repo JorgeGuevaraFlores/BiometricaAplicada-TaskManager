@@ -18,5 +18,7 @@ namespace ML.DTOs
         public string CorreoElectronico { get; set; } = null!;
 
         public string Password { get; set; } = null!;
+        public byte[]? Imagen { get; set; }
+
     }
 }

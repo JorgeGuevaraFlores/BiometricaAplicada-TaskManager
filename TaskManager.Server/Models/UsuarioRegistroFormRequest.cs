@@ -1,15 +1,8 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-namespace ML.DTOs
+﻿namespace TaskManager.Server.Models
 {
-    public class UsuarioResponse
+    public class UsuarioRegistroFormRequest
     {
         public Guid IdUsuario { get; set; }
-
         public string Nombre { get; set; } = string.Empty;
 
         public string ApellidoPaterno { get; set; } = string.Empty;
@@ -18,10 +11,8 @@ namespace ML.DTOs
 
         public string CorreoElectronico { get; set; } = string.Empty;
 
-        public DateTime FechaCreacion { get; set; }
+        public string Password { get; set; } = string.Empty;
 
-        public bool Activo { get; set; }
-
-        public byte[]? Imagen { get; set; }
+        public IFormFile? Imagen { get; set; }
     }
 }
